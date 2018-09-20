@@ -7,11 +7,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
-import com.quartz.zielclient.activities.assisted.AssistedSession;
-
-import com.quartz.zielclient.activities.carer.CarerSession;
-
 import com.quartz.zielclient.R;
+import com.quartz.zielclient.activities.carer.CarerHomepageActivity;
+import com.quartz.zielclient.activities.assisted.AssistedSelectCarer;
 
 /**
  * Temporary Activity to explore and integrate session creation into the application
@@ -36,10 +34,10 @@ public class ManualRedirect extends AppCompatActivity implements View.OnClickLis
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.toCarerSession:
-        startActivity(new Intent(ManualRedirect.this, CarerSession.class));
+        startActivity(new Intent(ManualRedirect.this, CarerHomepageActivity.class));
         break;
       case R.id.toAssistedActivity:
-        startActivity(new Intent(ManualRedirect.this, AssistedSession.class));
+        startActivity(new Intent(ManualRedirect.this, AssistedSelectCarer.class));
         break;
       default:
         break;

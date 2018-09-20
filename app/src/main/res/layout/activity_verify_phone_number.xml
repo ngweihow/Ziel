@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="25dp">
+
+
+    <TextView
+        android:id="@+id/channelIdEntry"
+        android:layout_width="320dp"
+        android:layout_height="95dp"
+        android:layout_marginBottom="14dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="46dp"
+        android:text="Ziel will send you an SMS message to verify your phone number. \nPlease enter your phone number:"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/phoneEntry"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+        android:id="@+id/phoneEntry"
+        android:layout_width="321dp"
+        android:layout_height="51dp"
+        android:layout_marginBottom="42dp"
+        android:layout_marginEnd="31dp"
+        android:layout_marginStart="31dp"
+        android:ems="25"
+        android:hint="@string/enter_number"
+        android:inputType="phone"
+        app:layout_constraintBottom_toTopOf="@+id/confirmNumber"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/channelIdEntry" />
+
+
+    <Button
+        android:id="@+id/confirmNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="250dp"
+        android:layout_marginEnd="30dp"
+        android:text="@string/confirm"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phoneEntry" />
+
+</android.support.constraint.ConstraintLayout>

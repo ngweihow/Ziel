@@ -1,14 +1,18 @@
 package com.quartz.zielclient.activities.common;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -27,49 +31,42 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.quartz.zielclient.R;
-import com.quartz.zielclient.utilities.map.DirectionsJSONParser;
-import com.quartz.zielclient.utilities.map.FetchUrl;
-import com.quartz.zielclient.utilities.map.ParserTask;
+import com.quartz.zielclient.channel.ChannelController;
+import com.quartz.zielclient.channel.ChannelData;
+import com.quartz.zielclient.channel.ChannelListener;
+import com.quartz.zielclient.map.FetchUrl;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
+import java.util.Objects;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static com.google.android.gms.location.LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_MAGENTA;
+import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
 
 /**
  * This class is responsible for handling all map activities.
- *
  * <p>
  * Courtesy : https://stackoverflow.com/questions/44992014/
  * how-to-get-current-location-in-googlemap-using-fusedlocationproviderclient/44993694#44993694
  *
  * @author Armaan McLeod
- * @version 1.0- 1
- * 28/08/2018
+ * @version 1.1
+ * 19/09/2018
  */
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, ChannelListener,
+    View.OnClickListener {
 
   // Custom permissions request code
   private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-
   private static final int DEFAULT_ZOOM = 11;
-
   private static final String API_URL = "https://maps.googleapis.com/maps/api/directions/json?";
 
-  private final String TAG = this.getClass().getSimpleName();
+  private final String activity = this.getClass().getSimpleName();
 
   private GoogleMap mGoogleMap;
 
@@ -79,23 +76,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
   private LatLng source;
   private LatLng destination;
 
-  public LatLng getDestination() {
-    return destination;
-  }
+  private String channelId;
 
-  public void setDestination(LatLng destination) {
-    this.destination = destination;
-  }
+  private ChannelData channel;
 
-  public LatLng getSource() {
-    return source;
-  }
-
-  public void setSource(LatLng source) {
-    this.source = source;
-  }
-
-  private LocationCallback mLocationCallback = new LocationCallback() {
+  private final LocationCallback mLocationCallback = new LocationCallback() {
 
     /**
      * Moves camera to last known location of user.
@@ -112,41 +97,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // The last location in the list is the newest
         Location location = locationList.get(locationList.size() - 1);
-        Log.i(TAG, "Location: " +
-            location.getLatitude() + " "
+        Log.i(activity, "Location: "
+            + location.getLatitude()
+            + " "
             + location.getLongitude());
 
-        // Update and draw source location
-        setSource(new LatLng(location.getLatitude(), location.getLongitude()));
-        drawMarker(source, BitmapDescriptorFactory.HUE_MAGENTA, "Current Location");
+        LatLng newSource = new LatLng(location.getLatitude(), location.getLongitude());
+
+        // Only draw onto map for first callback or if source location has changed.
+        // Ensures directions api doesn't get called too many times on start up.
+        if (source == null || !newSource.equals(source)) {
+          source = newSource;
+          drawOntoMap();
+        }
+
+        // Execute channel is available
+        if (channel != null) {
+          channel.setAssistedLocation(location);
+        }
       }
     }
   };
 
   /**
-   * Draws marker on the Google map.
-   * @param location This is the location on the map.
-   * @param colour This is the colour of the marker.
-   * @param message This is the message to pass to the marker.
-   */
-  private void drawMarker(LatLng location, float colour, String message) {
-    MarkerOptions markerOptions = new MarkerOptions();
-
-    // Update marker options
-    markerOptions.position(location);
-    markerOptions.title(message);
-    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(colour));
-
-    // Add marker to the map
-    mGoogleMap.addMarker(markerOptions);
-
-    // Zoom in on map location
-    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
-  }
-
-  /**
    * Creates map along with its attributes.
-   *
    * <p>
    * Documentation : https://developer.android.com/reference/android/app/
    * Activity.html#onCreate(android.os.Bundle)
@@ -156,11 +130,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_maps2);
+    setContentView(R.layout.activity_maps);
+
+    // Initialise channel
+    channelId = getIntent().getStringExtra(getResources().getString(R.string.channel_key));
+    if (channelId != null) {
+      channel = ChannelController.retrieveChannel(channelId, this);
+    }
+
+    Button toTextChatButton = findViewById(R.id.toTextChat);
+    toTextChatButton.setOnClickListener(this);
+
+    // Get bundle of arguments passed from Home Page Activity
+    Bundle bundle = getIntent().getExtras();
+    if (bundle != null) {
+      destination = bundle.getParcelable("destination");
+    }
 
     // Create autocomplete bar
     PlaceAutocompleteFragment placeAutoComplete = (PlaceAutocompleteFragment)
         getFragmentManager().findFragmentById(R.id.place_autocomplete);
+    Objects.requireNonNull(placeAutoComplete.getView()).setBackgroundColor(Color.WHITE);
 
     // Listen for new places queried in search bar
     placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -170,22 +160,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Clear all previous points on map
         mGoogleMap.clear();
 
-        Log.d(TAG, "Place selected: " + place.getLatLng());
-        setDestination(place.getLatLng());
+        Log.d(activity, "Place selected: " + place.getLatLng());
+        destination = place.getLatLng();
 
-        // Compute path to destination
-        String directionsURL = getDirectionsUrl();
-        FetchUrl fetchUrl = new FetchUrl(mGoogleMap);
-        fetchUrl.execute(directionsURL);
-
-        // Redraw both source and destination markers to screen
-        drawMarker(source, BitmapDescriptorFactory.HUE_MAGENTA, "Current Location");
-        drawMarker(destination, BitmapDescriptorFactory.HUE_RED, "Destination Location");
+        drawOntoMap();
       }
 
       @Override
-      public void onError(Status status) {
-        Log.d(TAG, "An error occurred: " + status);
+      public void onError(@NonNull Status status) {
+        Log.d(activity, "An error occurred: " + status);
       }
     });
 
@@ -202,8 +185,85 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
   }
 
   /**
-   * This is called when user received an event call.
+   * Draws source/destination markers and route onto map.
+   */
+  private void drawOntoMap() {
+    // draw both source and destination markers to map screen
+    drawMarker(source, HUE_MAGENTA);
+    drawMarker(destination, HUE_RED);
+
+    // Draw route to map screen
+    drawRoute();
+  }
+
+  /**
+   * Draws route between two points on the map
+   */
+  private void drawRoute() {
+    // Compute path to destination
+    String directionsURL = getDirectionsUrl();
+    FetchUrl fetchUrl = new FetchUrl(mGoogleMap);
+    fetchUrl.execute(directionsURL);
+
+    // Send directions to channel
+    if (channel != null) {
+      channel.setDirectionsURL(directionsURL);
+    }
+  }
+
+  /**
+   * Draws marker on the Google map.
    *
+   * @param location This is the location on the map.
+   * @param colour   This is the colour of the marker.
+   */
+  private void drawMarker(@NonNull LatLng location, float colour) {
+    MarkerOptions markerOptions = new MarkerOptions();
+
+    // Update marker options
+    markerOptions.position(location);
+
+    // Create address title of marker
+    String locationAddress = getAddress(location);
+    Log.d(activity, "Marker address: " + locationAddress);
+    markerOptions.title(getAddress(location));
+
+    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(colour));
+
+    // Add marker to the map
+    mGoogleMap.addMarker(markerOptions).showInfoWindow();
+
+    // Zoom in on map location
+    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
+  }
+
+  /**
+   * Gets the address of a location.
+   *
+   * @param location This is the location.
+   * @return String This is the address in String format.
+   */
+  private String getAddress(@NonNull LatLng location) {
+    String address = "";
+
+    // Create address geo coder
+    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+    try {
+
+      // Only retrieve the rop result
+      List<Address> addresses = geocoder.getFromLocation(location.latitude,
+          location.longitude,
+          1);
+      address = addresses.get(0).getAddressLine(0);
+    } catch (IOException e) {
+      Log.d(activity, "getAddress: Cannot fetch address");
+    }
+
+    return address;
+  }
+
+  /**
+   * This is called when user received an event call.
    * <p>
    * Documentation : https://developers.google.com/android/reference/com/google/android/gms/maps/
    * OnMapReadyCallback.html#onMapReady(com.google.android.gms.maps.GoogleMap)
@@ -224,16 +284,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
    * @param googleMap This is the Google Map
    */
   @Override
-  public void onMapReady(GoogleMap googleMap) {
+  public void onMapReady(@NonNull GoogleMap googleMap) {
 
     // Initialise Google map
     mGoogleMap = googleMap;
 
+    // Set listener for markers
+    mGoogleMap.setOnMarkerClickListener(marker -> {
+      Intent intent = new Intent(MapsActivity.this, StreetViewActivity.class);
+      intent.putExtra("destination", marker.getPosition());
+      startActivity(intent);
+      return true;
+    });
+
     // Setup location request and intervals between requests
     mLocationRequest = new LocationRequest();
-    mLocationRequest.setInterval(120000); // two minute interval
-    mLocationRequest.setFastestInterval(120000);
-    mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+    mLocationRequest.setInterval(1000); // two minute interval
+    mLocationRequest.setFastestInterval(1000);
+    mLocationRequest.setPriority(PRIORITY_BALANCED_POWER_ACCURACY);
 
     // Check permissions
     if (checkSelfPermission(ACCESS_FINE_LOCATION) == PERMISSION_GRANTED) {
@@ -281,7 +349,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
   /**
    * This is a callback for requesting and checking the result of a permission.
-   *
    * <p>
    * Documentation : https://developer.android.com/reference/android/support/v4/app/
    * ActivityCompat.OnRequestPermissionsResultCallback#onRequestPermissionsResult
@@ -301,6 +368,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
   /**
    * This is responsible for requesting a location permission from the user.
+   *
    * @param grantResults This is results for granted or un-granted permissions.
    */
   private void handleLocationPermission(@NonNull int[] grantResults) {
@@ -328,13 +396,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
   /**
    * Builds URL from Directions API web service.
+   *
    * @return String This is the new url pointing to the API endpoint.
    */
   private String getDirectionsUrl() {
 
     // Source and destination formats
     String strSource = "origin=" + source.latitude + "," + source.longitude;
-    String strDestination = "destination=" + destination.latitude + "," + destination.longitude;
+    String strDestination = "destination=" +
+        destination.latitude + "," +
+        destination.longitude;
 
     // Sensor initialisation
     String sensor = "sensor=false";
@@ -342,8 +413,43 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     // Building the parameters to the web service
     String parameters = strSource + "&" + strDestination + "&" + sensor;
 
-    // Building the url to the web service
-    return API_URL + parameters;
+    // Add parameters to api url
+    String apiRequest = API_URL + parameters;
 
+    Log.d(activity, "Directions request sent to " + apiRequest);
+
+    // Building the url to the web service
+    return apiRequest;
+  }
+
+  @Override
+  public void dataChanged() {
+    // notify user about new messages
+  }
+
+  @Override
+  public String getAssistedId() {
+    return null;
+  }
+
+  @Override
+  public String getCarerId() {
+    return null;
+  }
+
+  /**
+   * Called when a view has been clicked.
+   *
+   * @param view This is the view that was clicked.
+   */
+  @Override
+  public void onClick(@NonNull View view) {
+    int i = view.getId();
+    if (i == R.id.toTextChat) {
+      Intent intentToTextChat = new Intent(MapsActivity.this, TextChatActivity.class);
+      intentToTextChat.putExtra(getResources().getString(R.string.channel_key), channelId);
+      startActivity(intentToTextChat);
+
+    }
   }
 }

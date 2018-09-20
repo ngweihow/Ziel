@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="25dp">
+
+
+    <TextView
+        android:id="@+id/channelIdEntry"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="29dp"
+        android:layout_marginStart="29dp"
+        android:layout_marginTop="44dp"
+        android:text="Enter the 6 digit code received:"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/confirmationCodeEntry"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/confirmationCodeEntry"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="42dp"
+        android:layout_marginEnd="27dp"
+        android:layout_marginStart="27dp"
+        android:ems="25"
+        android:hint="Enter code here"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/resendButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/channelIdEntry" />
+
+
+    <Button
+        android:id="@+id/resendButton"
+        android:layout_width="146dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="308dp"
+        android:layout_marginStart="30dp"
+        android:text="Resend"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirmationCodeEntry" />
+
+
+    <Button
+        android:id="@+id/confirmCodeButton"
+        android:layout_width="146dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="29dp"
+        android:text="Confirm"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/resendButton"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

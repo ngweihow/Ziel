@@ -1,11 +1,23 @@
 <resources>
     <string name="app_name">ZielClient</string>
+    <string name="enter_number">Enter your phone number</string>
+    <string name="confirm">Confirm</string>
+    <string name="resend_code">Resend</string>
+    <string name="sending_confirmation_code">Sending confirmation code.</string>
+    <string name="failed_creation">Failed to create account.</string>
+    <string name="firstNameEntry">First name</string>
+    <string name="lastNameEntry">Last name</string>
+    <string name="chooseRole">Please select the profile that fits you.</string>
+    <string name="assisted_desc">I am looking for assistance.</string>
+    <string name="carer_desc">I am looking to help.</string>
+    <string name="userId">userId</string>
+    <string name="no_splash_screen_loaded">No Splash Screen Loaded</string>
+    <string name="title_activity_home_page">HomePageActivity</string>
+    <string name="title_activity_carer_homepage">CarerHomepageActivity</string>
     <string name="title_activity_session">SessionActivity</string>
     <string name="title_activity_carer_session">CarerSession</string>
     <string name="title_activity_assisted_session">AssistedSession</string>
     <string name="title_activity_manual_redirect">ManualRedirect</string>
-    <string name="no_splash_screen_loaded">No Splash Screen Loaded</string>
-    <string name="title_activity_home_page">HomePageActivity</string>
     <string name="current_channel">currentSession</string>
     <string name="notificationChannelName">helpChannel</string>
     <string name="notificationChannelDescription">Assisted requires assistance</string>
@@ -14,4 +26,14 @@
     <string name="waiting">waiting</string>
     <string name="current_session">currentSession</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_carer_maps">Map</string>
+    <string name="street_view">Street View</string>
+    <string name="where_to">Where To?</string>
+    <string name="direct_me_there">Direct Me There!</string>
+    <string name="channel_active">Channel is active</string>
+    <string name="channel_inactive">Channel is inactive</string>
+    <string name="carer_status">carerStatus</string>
+    <string name="channel_key">channelId</string>
+    <string name="userAdded">User Added</string>
+    <string name="userNotFound">User not found try again</string>
 </resources>

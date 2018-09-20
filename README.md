@@ -21,6 +21,7 @@ Please note that we use Android SDK Version 28, and targeting Java 8. See [this 
   * Places API 
   * Places SDK for Android 
   * Directions API
+  * Street View API
 * Create a file called `secrets.xml` in `ZielClient/app/src/main/res/values` with the the following code:
 ```xml
 <?xml version="1.0" encoding="utf-8"?>

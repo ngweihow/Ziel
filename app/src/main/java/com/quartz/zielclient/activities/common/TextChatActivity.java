@@ -1,18 +1,20 @@
 package com.quartz.zielclient.activities.common;
 
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.quartz.zielclient.R;
-import com.quartz.zielclient.utilities.Message;
-import com.quartz.zielclient.utilities.MessageFactory;
-import com.quartz.zielclient.utilities.channel.Channel;
-import com.quartz.zielclient.utilities.channel.ChannelHandler;
-import com.quartz.zielclient.utilities.channel.ChannelListener;
+import com.quartz.zielclient.channel.ChannelController;
+import com.quartz.zielclient.channel.ChannelData;
+import com.quartz.zielclient.channel.ChannelListener;
+import com.quartz.zielclient.messages.Message;
+import com.quartz.zielclient.messages.MessageFactory;
+
+import java.util.Objects;
 
 /**
  * Chat activity allows users to communicate with eachother through messaging
@@ -20,23 +22,22 @@ import com.quartz.zielclient.utilities.channel.ChannelListener;
  */
 public class TextChatActivity extends AppCompatActivity implements ChannelListener, View.OnClickListener {
 
-  // TODO handle channels.
-  private static final String DEBUG_ID = "90a2c51d-4d9a-4d15-af8e-9639ff472231";
 
   // temporary for debugging will become a dynamic channel
-  private Channel channel = ChannelHandler.retrieveChannel(DEBUG_ID, this);
+  private ChannelData channel;
   private TextView chatOutput;
   private TextInputEditText chatInput;
-  private Button sendButton;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    String channelKey = getIntent().getStringExtra(getApplicationContext().getString(R.string.channel_key));
+    channel = ChannelController.retrieveChannel(channelKey, this);
     setContentView(R.layout.activity_text_chat);
     // initialize graphical elements
     chatOutput = findViewById(R.id.chatOutput);
     chatInput = findViewById(R.id.chatInput);
-    sendButton = findViewById(R.id.sendButton);
+    Button sendButton = findViewById(R.id.sendButton);
     sendButton.setOnClickListener(this);
   }
 
@@ -61,11 +62,12 @@ public class TextChatActivity extends AppCompatActivity implements ChannelListen
   /**
    * Send message located in the input view
    *
-   * @param view
+   * @param view This is the view of the text chat
    */
   @Override
   public void onClick(View view) {
-    Message messageToSend = MessageFactory.makeTextMessage(chatInput.getText().toString());
+    Message messageToSend = MessageFactory.makeTextMessage(
+        Objects.requireNonNull(chatInput.getText()).toString());
     channel.sendMessage(messageToSend);
 
   }

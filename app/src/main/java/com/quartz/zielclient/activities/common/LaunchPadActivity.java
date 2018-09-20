@@ -1,12 +1,15 @@
 package com.quartz.zielclient.activities.common;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 import com.quartz.zielclient.R;
+import com.quartz.zielclient.activities.carer.CarerHomepageActivity;
+import com.quartz.zielclient.activities.HomePageActivity;
+import com.quartz.zielclient.activities.signup.SignUpActivity;
 
 
 /**
@@ -25,14 +28,14 @@ public class LaunchPadActivity extends AppCompatActivity implements View.OnClick
     setContentView(R.layout.activity_launch_pad);
     Button signIn = findViewById(R.id.signInButton);
     Button signUp = findViewById(R.id.signUpButton);
-    Button navigation = findViewById(R.id.navigationButton);
-    Button textChat = findViewById(R.id.textChatButton);
     Button sessionMaker = findViewById(R.id.sessionMakerButton);
+    Button assistedHome = findViewById(R.id.assistedHome);
+    Button carerHome = findViewById(R.id.carerHome);
     signIn.setOnClickListener(this);
     signUp.setOnClickListener(this);
-    navigation.setOnClickListener(this);
-    textChat.setOnClickListener(this);
     sessionMaker.setOnClickListener(this);
+    assistedHome.setOnClickListener(this);
+    carerHome.setOnClickListener(this);
   }
 
   @Override
@@ -42,19 +45,26 @@ public class LaunchPadActivity extends AppCompatActivity implements View.OnClick
         // do your code
         break;
       case R.id.signUpButton:
-        // do your code
-        break;
-      case R.id.textChatButton:
-        startActivity(new Intent(LaunchPadActivity.this,TextChatActivity.class));
-        break;
-      case R.id.navigationButton:
-        startActivity(new Intent(LaunchPadActivity.this, MapsActivity.class));
+        startActivity(new Intent(LaunchPadActivity.this, SignUpActivity.class));
         break;
       case R.id.sessionMakerButton:
         startActivity(new Intent(LaunchPadActivity.this, ManualRedirect.class));
+        break;
+      case R.id.assistedHome:
+        startActivity(new Intent(LaunchPadActivity.this, HomePageActivity.class));
+        break;
+      case R.id.carerHome:
+        startActivity(new Intent(LaunchPadActivity.this, CarerHomepageActivity.class));
         break;
       default:
         break;
     }
   }
+
+  //  private void watchNotificationChange() {
+  //    firebaseDatabase = FirebaseDatabase.getInstance();
+  //    DatabaseReference notifcationRef = firebaseDatabase.getReference("users/" + id);
+  //    notifcationRef.child(getResources().getString(R.string.current_channel)).setValue(getResources().getString(R.string.waiting));
+  //    notifcationRef.addValueEventListener(this);
+  //  }
 }

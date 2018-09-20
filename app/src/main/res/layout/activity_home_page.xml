@@ -6,4 +6,72 @@
     android:layout_height="match_parent"
     tools:context=".activities.HomePageActivity">
 
+    <fragment
+        android:id="@+id/editText"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="228dp"
+        android:layout_marginEnd="138dp"
+        android:layout_marginStart="138dp"
+        android:layout_marginTop="234dp"
+        android:ems="10"
+        android:fontFamily="@font/allerta"
+        android:inputType="textPersonName"
+        android:text="@string/where_to"
+        android:textAppearance="@android:style/TextAppearance"
+        android:textColor="#A8A8A8"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
+
+    <TextView
+        android:id="@+id/HomePage"
+        android:layout_width="153dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="138dp"
+        android:layout_marginStart="138dp"
+        android:layout_marginTop="234dp"
+        android:ems="10"
+        android:fontFamily="@font/allerta"
+        android:inputType="textPersonName"
+        android:text="@string/where_to"
+        android:textAppearance="@android:style/TextAppearance"
+        android:textColor="#A8A8A8"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/editText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Where To?" />
+
+    <Button
+        android:id="@+id/directMeButton"
+        android:layout_width="217dp"
+        android:layout_height="67dp"
+        android:layout_marginEnd="83dp"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="137dp"
+        android:text="@string/direct_me_there"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+    <Button
+        android:id="@+id/addCarerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="17dp"
+        android:text="Add a Carer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:layout_constraintVertical_bias="0.871" />
 </android.support.constraint.ConstraintLayout>
