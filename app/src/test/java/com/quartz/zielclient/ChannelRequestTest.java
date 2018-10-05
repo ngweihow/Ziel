@@ -8,7 +8,7 @@ import com.quartz.zielclient.user.UserFactory;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ChannelRequestTest {
 
@@ -26,5 +26,26 @@ public class ChannelRequestTest {
     ChannelRequest timeStampTestReq = ChannelRequestFactory.getChannelRequest(testRequest);
     timeStampTestReq.setTimestamp(1537362683L * 1000);
     assertEquals("23:11, 19/09/2018", timeStampTestReq.formattedTimestamp());
+  }
+
+  @Test
+  public void testRequestComparison() {
+    ChannelRequest timeStampTestReq = ChannelRequestFactory.getChannelRequest(testRequest);
+    timeStampTestReq.setTimestamp(1537362683L * 1000);
+    ChannelRequest timeStampTestReq2 = ChannelRequestFactory.getChannelRequest(testRequest);
+    timeStampTestReq.setTimestamp(1537362684L * 1000);
+    assert(timeStampTestReq.compareTo(timeStampTestReq2)>0);
+  }
+
+  /**
+   * List needs to be ordered so one Message > Message regardless
+   */
+  @Test
+  public void testRequestEquals() {
+    ChannelRequest timeStampTestReq = ChannelRequestFactory.getChannelRequest(testRequest);
+    timeStampTestReq.setTimestamp(1537362683L * 1000);
+    ChannelRequest timeStampTestReq2 = ChannelRequestFactory.getChannelRequest(testRequest);
+    timeStampTestReq.setTimestamp(1537362683L * 1000);
+    assert(timeStampTestReq.compareTo(timeStampTestReq2) > 0);
   }
 }

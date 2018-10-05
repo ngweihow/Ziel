@@ -9,43 +9,91 @@
     <android.support.v7.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="67dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent">
+        <!--android:layout_marginBottom="16dp"-->
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp">
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/buton_user_profile"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--<TextView-->
+            <!--android:id="@+id/icon_text"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_marginBottom="6dp"-->
+            <!--android:layout_marginEnd="20dp"-->
+            <!--android:layout_marginStart="29dp"-->
+            <!--android:text="BS"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:textSize="20dp"-->
+            <!--android:textStyle="bold"-->
+            <!--app:layout_constraintBottom_toTopOf="@+id/DisplayID"-->
+            <!--app:layout_constraintEnd_toStartOf="@+id/carerName"-->
+            <!--app:layout_constraintStart_toStartOf="parent" />-->
+
+
+            <TextView
+                android:id="@+id/carerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="Name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="25sp"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/DisplayID"
-                android:layout_width="10dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Name" />
+                android:text="displayID"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="@+id/imageView4"
+                app:layout_constraintTop_toTopOf="@+id/imageView4" />
 
-        </LinearLayout>
+
+        </android.support.constraint.ConstraintLayout>
 
         <Button
             android:id="@+id/createChannelButton"
             android:layout_width="109dp"
             android:layout_height="match_parent"
             android:layout_gravity="right"
+            android:layout_marginRight="16dp"
             android:layout_marginVertical="@dimen/list_button_vertical_margin"
-            android:text="create"
+            android:background="@drawable/whitebutton"
+            android:text="Connect"
+            android:textAllCaps="false"
             android:textSize="20sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/holo_orange_light" />
+            android:layout_marginTop="65dp"
+            android:background="#e1dede" />
+        <!--android:layout_marginTop="65dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginRight="16dp"-->
+
+
     </android.support.v7.widget.CardView>
 
 </android.support.constraint.ConstraintLayout>

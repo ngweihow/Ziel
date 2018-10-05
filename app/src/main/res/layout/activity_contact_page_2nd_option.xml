@@ -1,0 +1,86 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.common.MapsActivity"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+
+    <fragment
+        android:id="@+id/place_autocomplete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        />
+
+    <fragment
+        android:id="@+id/map"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.18"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.82">
+
+        <Button
+            android:id="@+id/Message"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@android:color/transparent"
+            android:drawablePadding="-20sp"
+            android:drawableTop="@drawable/ic_phone_message"
+            android:paddingTop="10sp"
+            android:scaleType="fitCenter"
+            android:text="\nMessage"
+            android:textColor="#a7a3a3"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/Call"
+            app:layout_constraintEnd_toStartOf="@+id/Call"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/Call" />
+
+        <Button
+            android:id="@+id/Call"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@android:color/transparent"
+            android:drawablePadding="-20sp"
+            android:drawableTop="@drawable/ic_phone_call"
+            android:paddingTop="10sp"
+            android:scaleType="fitCenter"
+            android:text="\nCall"
+            android:textColor="#a7a3a3"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/VideoCall"
+            app:layout_constraintEnd_toStartOf="@+id/VideoCall"
+            app:layout_constraintStart_toEndOf="@+id/Message"
+            app:layout_constraintTop_toTopOf="@+id/VideoCall" />
+
+        <Button
+            android:id="@+id/VideoCall"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@android:color/transparent"
+            android:drawablePadding="-20sp"
+            android:drawableTop="@drawable/ic_phone_video"
+            android:paddingTop="10sp"
+            android:scaleType="fitCenter"
+            android:text="\nVideo Call"
+            android:textColor="#a7a3a3"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/Call"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+
+
+</LinearLayout>

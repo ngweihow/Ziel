@@ -1,11 +1,13 @@
 package com.quartz.zielclient.activities.carer;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,6 +19,7 @@ import com.quartz.zielclient.R;
 import com.quartz.zielclient.activities.signup.SignUpActivity;
 import com.quartz.zielclient.adapters.RequestListAdapter;
 import com.quartz.zielclient.models.ChannelRequest;
+import com.quartz.zielclient.notifications.NotificationHandler;
 import com.quartz.zielclient.user.UserController;
 
 import java.util.Collections;
@@ -28,7 +31,7 @@ import java.util.Optional;
  *
  * @author wei how ng
  */
-public class CarerHomepageActivity extends Activity implements ValueEventListener {
+public class CarerHomepageActivity extends AppCompatActivity implements ValueEventListener {
 
   private RecyclerView mRecyclerView;
   private RecyclerView.Adapter mAdapter;
@@ -36,11 +39,18 @@ public class CarerHomepageActivity extends Activity implements ValueEventListene
   private List<ChannelRequest> listItems;
   private DatabaseReference requestsReference;
   private String userID;
+  private Boolean initialisedList = false;
+  private NotificationHandler notificationHandler;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_carer_homepage);
+    Window window = getWindow();
+    window.addFlags(
+        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+            | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+            | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     Optional<String> maybeId = UserController.retrieveUid();
     if (maybeId.isPresent()) {
@@ -50,7 +60,8 @@ public class CarerHomepageActivity extends Activity implements ValueEventListene
       finish();
       return;
     }
-
+    notificationHandler = new NotificationHandler(this);
+    notificationHandler.createNotificationChannel();
     // Getting requestsReference from FireBase
     requestsReference = FirebaseDatabase.getInstance().getReference("channelRequests/" + userID);
     requestsReference.addValueEventListener(this);
@@ -73,6 +84,12 @@ public class CarerHomepageActivity extends Activity implements ValueEventListene
    */
   private void initData(List<ChannelRequest> channelRequestsData) {
     Collections.sort(channelRequestsData);
+    if (!initialisedList) {
+      initialisedList = true;
+    } else {
+      notificationHandler.notifyUserToOpenApp(channelRequestsData.get(0));
+    }
+
     listItems = channelRequestsData;
 
     // Using the Adapter to convert the data into the recycler view

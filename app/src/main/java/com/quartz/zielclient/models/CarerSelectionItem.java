@@ -6,24 +6,28 @@ import java.util.Objects;
 
 public class CarerSelectionItem implements Model {
 
-  private static final String NAME_KEY = "name";
+  private static final String NAME_KEY = "firstName";
+  private static final String LAST_NAME_KEY = "lastName";
   private static final String NUMBER_KEY = "phoneNumber";
   private static final String CARER_ID = "carer_id";
 
-  private String name;
+  private String firstName;
   private String phoneNumber;
   private String carerId;
+  private String lastName;
 
   public CarerSelectionItem() {}
 
-  public CarerSelectionItem(String name, String phoneNumber, String carerId) {
-    this.name = name;
+  public CarerSelectionItem(String name, String phoneNumber, String carerId, String lastName) {
+    this.firstName = name;
+    this.lastName = lastName;
     this.phoneNumber = phoneNumber;
     this.carerId = carerId;
   }
 
   public CarerSelectionItem(CarerSelectionItem carerSelectionItem) {
-    this.name = carerSelectionItem.name;
+    this.firstName = carerSelectionItem.firstName;
+    this.firstName = carerSelectionItem.lastName;
     this.phoneNumber = carerSelectionItem.phoneNumber;
     this.carerId = carerSelectionItem.carerId;
   }
@@ -31,7 +35,8 @@ public class CarerSelectionItem implements Model {
   @Override
   public Bundle toBundle() {
     Bundle bundle = new Bundle();
-    bundle.putString(NAME_KEY, name);
+    bundle.putString(LAST_NAME_KEY,lastName);
+    bundle.putString(NAME_KEY, firstName);
     bundle.putString(NUMBER_KEY, phoneNumber);
     bundle.putString(CARER_ID, phoneNumber);
     return bundle;
@@ -45,17 +50,17 @@ public class CarerSelectionItem implements Model {
     this.phoneNumber = phoneNumber;
   }
 
-  public String getName() {
-    return name;
+  public String getFirstName() {
+    return firstName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setFirstName(String name) {
+    this.firstName = name;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, phoneNumber);
+    return Objects.hash(firstName, phoneNumber);
   }
 
   public String getCarerId() {
@@ -65,4 +70,12 @@ public class CarerSelectionItem implements Model {
   public void setCarerId(String carerId) {
     this.carerId = carerId;
   }
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
 }

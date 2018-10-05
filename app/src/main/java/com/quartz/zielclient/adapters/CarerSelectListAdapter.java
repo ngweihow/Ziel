@@ -1,10 +1,10 @@
 package com.quartz.zielclient.adapters;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +17,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.quartz.zielclient.R;
-import com.quartz.zielclient.activities.assisted.AssistedSelectCarerActivity;
 import com.quartz.zielclient.activities.common.MapsActivity;
 import com.quartz.zielclient.channel.ChannelController;
 import com.quartz.zielclient.channel.ChannelData;
-import com.quartz.zielclient.channel.ChannelListener;
 import com.quartz.zielclient.channel.ChannelRequestController;
 import com.quartz.zielclient.exceptions.AuthorisationException;
 import com.quartz.zielclient.models.CarerSelectionItem;
@@ -34,17 +32,12 @@ import java.util.List;
 public class CarerSelectListAdapter
     extends RecyclerView.Adapter<CarerSelectListAdapter.TextViewHolder> {
   private List<CarerSelectionItem> listItems;
-  private AssistedSelectCarerActivity context;
+  private Activity activity;
 
   // Constructor
-  public CarerSelectListAdapter(
-      List<CarerSelectionItem> listItems, AssistedSelectCarerActivity assistedSelectCarerActivity) {
+  public CarerSelectListAdapter(List<CarerSelectionItem> listItems, Activity activity) {
     this.listItems = listItems;
-    listItems.forEach(
-        x -> {
-          Log.d("ASDF", x.getPhoneNumber());
-        });
-    this.context = assistedSelectCarerActivity;
+    this.activity = activity;
   }
 
   // Create ViewGroup whenever TextViewHolder gets instantiated
@@ -68,6 +61,9 @@ public class CarerSelectListAdapter
     CarerSelectionItem carerSelectionItem = listItems.get(i);
 
     // Fetching the Names and number
+    String carerFullName =
+        carerSelectionItem.getFirstName() + " " + carerSelectionItem.getLastName();
+    textViewHolder.carerName.setText(carerFullName);
     textViewHolder.textViewId.setText(carerSelectionItem.getCarerId());
   }
 
@@ -83,6 +79,7 @@ public class CarerSelectListAdapter
 
     // Defining TextViews of the Assisted List Objects
     private TextView textViewId;
+    private TextView carerName;
 
     private String carerId;
     private User assisted;
@@ -91,7 +88,7 @@ public class CarerSelectListAdapter
 
     TextViewHolder(@NonNull View itemView) {
       super(itemView);
-
+      carerName = itemView.findViewById(R.id.carerName);
       textViewId = itemView.findViewById(R.id.DisplayID);
 
       Button connectButton = itemView.findViewById(R.id.createChannelButton);
@@ -103,24 +100,12 @@ public class CarerSelectListAdapter
     public void onClick(View v) {
       channelData =
           ChannelController.createChannel(
-              new ChannelListener() {
-                @Override
-                public void dataChanged() {}
+              () -> {}, textViewId.getText().toString(), FirebaseAuth.getInstance().getUid());
 
-                @Override
-                public String getAssistedId() {
-                  return FirebaseAuth.getInstance().getUid();
-                }
-
-                @Override
-                public String getCarerId() {
-                  return textViewId.getText().toString();
-                }
-              });
       // start intent to open maps
-      intentToMaps = new Intent(context, MapsActivity.class);
-      intentToMaps.putExtra(context.getString(R.string.channel_key), channelData.getChannelKey());
-      Bundle bundle = context.getIntent().getExtras();
+      intentToMaps = new Intent(activity, MapsActivity.class);
+      intentToMaps.putExtra(activity.getString(R.string.channel_key), channelData.getChannelKey());
+      Bundle bundle = activity.getIntent().getExtras();
 
       // inject the destination which was established on the homepage
       if (bundle != null) {
@@ -139,7 +124,7 @@ public class CarerSelectListAdapter
       assisted = UserFactory.getUser(dataSnapshot);
       carerId = textViewId.getText().toString();
       ChannelRequestController.createRequest(assisted, carerId, channelData.getChannelKey(), "");
-      context.startActivity(intentToMaps);
+      activity.startActivity(intentToMaps);
     }
 
     @Override

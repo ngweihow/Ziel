@@ -1,63 +1,97 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mapsActivityId"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:fitsSystemWindows="true"
     android:weightSum="1"
+    android:windowTranslucentNavigation="true"
+    android:windowTranslucentStatus="true"
     tools:context=".activities.common.MapsActivity">
 
     <fragment
         android:id="@+id/place_autocomplete"
         android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <fragment
         android:id="@+id/map"
         class="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="766dp"
-        android:layout_weight="0.4" />
+        android:layout_width="0dp"
+        android:layout_height="469dp"
 
-    <Button
-        android:id="@+id/toTextChat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="To Text Chat" />
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/place_autocomplete" />
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="86dp"
+        android:fitsSystemWindows="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/map">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvContacts"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+        <Button
+            android:id="@+id/toTextChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawablePadding="-15sp"
+            android:drawableTop="@drawable/ic_phone_message"
+            android:scaleType="fitCenter"
+            android:text="\nMessage"
+            android:textAllCaps="false"
+            android:textColor="#a7a3a3"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/toVoiceChat"
+            app:layout_constraintEnd_toStartOf="@+id/toVoiceChat"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/toVoiceChat" />
+
+        <Button
+            android:id="@+id/toVoiceChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawablePadding="-15sp"
+            android:drawableTop="@drawable/ic_phone_call"
+            android:scaleType="fitCenter"
+            android:text="\nCall"
+            android:textAllCaps="false"
+            android:textColor="#a7a3a3"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/toVideoChatButton"
+            app:layout_constraintEnd_toStartOf="@+id/toVideoChatButton"
+            app:layout_constraintStart_toEndOf="@+id/toTextChat"
+            app:layout_constraintTop_toTopOf="@+id/toVideoChatButton" />
+
+        <Button
+            android:id="@+id/toVideoChatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawablePadding="-15sp"
+            android:drawableTop="@drawable/ic_phone_video"
+            android:scaleType="fitCenter"
+            android:text="\nVideo Call"
+            android:textAllCaps="false"
+            android:textColor="#a7a3a3"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/toVoiceChat"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <include
-            android:id="@+id/include2"
-            layout="@layout/activity_add_carer_button"
-            android:layout_height="443dp"
-            tools:layout_editor_absoluteY="124dp"
-            android:layout_width="match_parent"
-            tools:ignore="MissingConstraints" />
-
-        <include
-            android:id="@+id/include3"
-            layout="@layout/acitivity_carer_contact"
-            android:layout_width="388dp"
-            android:layout_height="155dp"
-            app:layout_constraintTop_toTopOf="@+id/include2"
-            tools:layout_editor_absoluteX="0dp"
-            tools:ignore="MissingConstraints" />
-
     </android.support.constraint.ConstraintLayout>
 
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

@@ -11,8 +11,4 @@ public interface ChannelListener {
    * object needs to receive updates when values in the channel have been updated
    */
   void dataChanged();
-
-  String getAssistedId();
-
-  String getCarerId();
 }

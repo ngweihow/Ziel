@@ -21,7 +21,7 @@ import java.util.Map;
  * @version 1.0- 1
  * 01/09/2018
  */
-public class DirectionsJSONParser {
+class DirectionsJSONParser {
 
   /**
    * This receives a JSONObject and returns a list of routes.
@@ -29,7 +29,7 @@ public class DirectionsJSONParser {
    * @param jObject The JSON object to parse.
    * @return This is the list of routes.
    */
-  public List<List<Map<String, String>>> parse(JSONObject jObject) {
+  List<List<Map<String, String>>> parse(JSONObject jObject) {
     List<List<Map<String, String>>> routes = new ArrayList<>();
 
     try {

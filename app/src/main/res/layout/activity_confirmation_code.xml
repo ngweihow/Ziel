@@ -6,33 +6,44 @@
     android:layout_height="match_parent"
     tools:layout_editor_absoluteY="25dp">
 
+    <TextView
+        android:id="@+id/channelIdEntry1"
+        android:layout_width="266dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="53dp"
+        android:text="SMS Confirmation"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/channelIdEntry"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/channelIdEntry"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginEnd="29dp"
-        android:layout_marginStart="29dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginEnd="31dp"
+        android:layout_marginStart="31dp"
         android:text="Enter the 6 digit code received:"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/confirmationCodeEntry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/channelIdEntry1" />
 
     <EditText
         android:id="@+id/confirmationCodeEntry"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="42dp"
-        android:layout_marginEnd="27dp"
-        android:layout_marginStart="27dp"
+        android:layout_marginBottom="51dp"
+        android:layout_marginEnd="31dp"
+        android:layout_marginStart="31dp"
         android:ems="25"
         android:hint="Enter code here"
         android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/resendButton"
+        app:layout_constraintBottom_toTopOf="@+id/confirmCodeButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/channelIdEntry" />
@@ -40,25 +51,30 @@
 
     <Button
         android:id="@+id/resendButton"
-        android:layout_width="146dp"
+        android:layout_width="0dp"
         android:layout_height="55dp"
-        android:layout_marginBottom="308dp"
-        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="31dp"
+        android:background="@drawable/whitebutton"
         android:text="Resend"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirmationCodeEntry" />
+        android:textSize="20sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/confirmCodeButton"
+        app:layout_constraintEnd_toStartOf="@+id/confirmCodeButton"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <Button
         android:id="@+id/confirmCodeButton"
-        android:layout_width="146dp"
+        android:layout_width="0dp"
         android:layout_height="55dp"
-        android:layout_marginEnd="29dp"
+        android:layout_marginBottom="239dp"
+        android:layout_marginEnd="31dp"
+        android:background="@drawable/whitebutton"
         android:text="Confirm"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/resendButton"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/resendButton"
+        app:layout_constraintTop_toBottomOf="@+id/confirmationCodeEntry" />
 
 </android.support.constraint.ConstraintLayout>

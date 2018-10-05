@@ -5,6 +5,9 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +26,7 @@ import java.net.URL;
  */
 public class FetchUrl extends AsyncTask<String, Void, String> {
 
-  private final String activity = this.getClass().getSimpleName();
+  private static final String ACTIVITY = "FetchUrl";
 
   private final GoogleMap googleMap;
 
@@ -48,9 +51,9 @@ public class FetchUrl extends AsyncTask<String, Void, String> {
     // Attempt to download the URL
     try {
       data = downloadUrl(url[0]);
-      Log.d(activity, data);
+      Log.d(ACTIVITY, data);
     } catch (Exception e) {
-      Log.d(activity, e.toString());
+      Log.d(ACTIVITY, e.toString());
     }
 
     return data;
@@ -80,20 +83,18 @@ public class FetchUrl extends AsyncTask<String, Void, String> {
    * @return String This is the JSON data in String format.
    * @throws IOException This is the IO exception that triggers when reading the file fails.
    */
-  private String downloadUrl(@NonNull String strUrl) throws IOException {
+  static String downloadUrl(@NonNull String strUrl) throws IOException {
     String data = "";
-    InputStream iStream = null;
-    HttpURLConnection urlConnection = null;
+    HttpURLConnection urlConnection;
 
-    try {
+    // Open connection with endpoint
+    URL url = new URL(strUrl);
+    urlConnection = (HttpURLConnection) url.openConnection();
+    urlConnection.connect();
 
-      // Open connection with endpoint
-      URL url = new URL(strUrl);
-      urlConnection = (HttpURLConnection) url.openConnection();
-      urlConnection.connect();
+    try (InputStream iStream = urlConnection.getInputStream()) {
 
       // Setup input stream ready to buffer data
-      iStream = urlConnection.getInputStream();
       try (BufferedReader br = new BufferedReader(new InputStreamReader(iStream))) {
         StringBuilder sb = new StringBuilder();
 
@@ -104,20 +105,14 @@ public class FetchUrl extends AsyncTask<String, Void, String> {
         }
 
         data = sb.toString();
-        Log.d(activity, data);
+        Log.d(ACTIVITY, data);
       }
 
     } catch (MalformedURLException e) {
-      Log.d(activity, e.toString());
+      Log.d(ACTIVITY, e.toString());
 
     } finally {
-      if (iStream != null) {
-        iStream.close();
-      }
-
-      if (urlConnection != null) {
         urlConnection.disconnect();
-      }
     }
 
     return data;

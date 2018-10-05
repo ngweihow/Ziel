@@ -7,36 +7,42 @@
 
     <Button
         android:id="@+id/signup"
-        android:layout_width="286dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="70dp"
+        android:layout_width="222dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="104dp"
+        android:background="@drawable/whitebutton"
         android:text="Sign Up"
+        android:textAllCaps="false"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="184dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="99dp"
+        android:layout_width="202dp"
+        android:layout_height="177dp"
+        android:layout_marginTop="80dp"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/ic_launcher_foreground_ziel_logo" />
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="149dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="114dp"
-        android:gravity="center_horizontal"
-        android:text="Ziel"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/signup"
+        android:layout_width="0dp"
+        android:layout_height="43dp"
+        android:layout_marginBottom="282dp"
+        android:layout_marginEnd="63dp"
+        android:layout_marginStart="63dp"
+        android:text="Welcome to Ziel!"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
 </android.support.constraint.ConstraintLayout>

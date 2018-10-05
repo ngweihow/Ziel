@@ -2,6 +2,7 @@ package com.quartz.zielclient.activities.carer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.quartz.zielclient.R;
 import com.quartz.zielclient.activities.common.TextChatActivity;
+import com.quartz.zielclient.activities.common.VideoActivity;
+import com.quartz.zielclient.activities.common.VoiceActivity;
 import com.quartz.zielclient.channel.ChannelController;
 import com.quartz.zielclient.channel.ChannelData;
 import com.quartz.zielclient.channel.ChannelListener;
@@ -36,6 +39,7 @@ public class CarerMapsActivity extends AppCompatActivity
   private final double MELBOURNEUNILONG = 144.9612;
   // initialize assisted location marker
   private final MarkerOptions assistedMarkerOptions = new MarkerOptions();
+  AlertDialog alertDialog;
   private String channelId;
   private GoogleMap mGoogleMap;
   private String currentDestinationURL = "none";
@@ -44,6 +48,7 @@ public class CarerMapsActivity extends AppCompatActivity
   private Double[] latitude = {MELBOURNEUNILAT};
   private Double[] longitude = {MELBOURNEUNILONG};
   private Button toTextChat;
+  private Button toVoiceChat;
   private Marker assistedMarker;
 
   // debug channel to be replaced with the current channel that was handled by a previous activity.
@@ -59,10 +64,19 @@ public class CarerMapsActivity extends AppCompatActivity
     // set xml view file
     setContentView(R.layout.activity_carer_maps);
     toTextChat = findViewById(R.id.toTextChat);
+    toVoiceChat = findViewById(R.id.toVoiceChat);
+    Button toVideoChat = findViewById(R.id.toVideoActivity);
+    toVideoChat.setOnClickListener(this);
+    toVoiceChat.setOnClickListener(this);
+    alertDialog = makeVideoAlert();
     toTextChat.setOnClickListener(this);
     channelId = getIntent().getStringExtra(getApplicationContext().getString(R.string.channel_key));
-    channel = ChannelController.retrieveChannel(channelId, this);
-
+    if (channelId != null) {
+      channel = ChannelController.retrieveChannel(channelId, this);
+    }
+    Intent intentVoice = new Intent(CarerMapsActivity.this, VoiceActivity.class);
+    intentVoice.putExtra("initiate", 1);
+    startActivity(intentVoice);
     // Obtain the SupportMapFragment and get notified when the map is ready to be used.
     SupportMapFragment mapFragment =
         (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -106,29 +120,24 @@ public class CarerMapsActivity extends AppCompatActivity
     longitude[0] = channel.getAssistedLocation().longitude;
     updateMapCoords();
 
-    // if the assisted has entered a route then generate that same route
-    if ((channel.getDirectionsURL() != null) && !channel.getDirectionsURL().equals("none")) {
-      // if the route is already the current route then don't update
-      if (!channel.getDirectionsURL().equals(currentDestinationURL)) {
-        // update the route
-        Log.d("DIRECTIONS", channel.getDirectionsURL());
-        FetchUrl fetchUrl = new FetchUrl(mGoogleMap);
-        fetchUrl.execute(channel.getDirectionsURL());
-        currentDestinationURL = channel.getDirectionsURL();
+    if (channel != null) {
+      // if the assisted has entered a route then generate that same route
+      if ((channel.getDirectionsURL() != null) && !channel.getDirectionsURL().equals("none")) {
+        // if the route is already the current route then don't update
+        if (!channel.getDirectionsURL().equals(currentDestinationURL)) {
+          // update the route
+          Log.d("DIRECTIONS", channel.getDirectionsURL());
+          FetchUrl fetchUrl = new FetchUrl(mGoogleMap);
+          fetchUrl.execute(channel.getDirectionsURL());
+          currentDestinationURL = channel.getDirectionsURL();
+        }
+      }
+      if (channel.getVideoCallStatus()) {
+        alertDialog.show();
+      } else {
+        alertDialog.cancel();
       }
     }
-  }
-
-  // return the carer and assisted associated to this activtiy
-  // should become getUser.Id and getAssisted.ID
-  @Override
-  public String getAssistedId() {
-    return "Assisted1";
-  }
-
-  @Override
-  public String getCarerId() {
-    return "carer1";
   }
 
   @Override
@@ -140,8 +149,43 @@ public class CarerMapsActivity extends AppCompatActivity
             getApplicationContext().getString(R.string.channel_key), channelId);
         startActivity(intentToTextChat);
         break;
+      case R.id.toVoiceChat:
+        Intent intentVoice = new Intent(CarerMapsActivity.this, VoiceActivity.class);
+        if (channel != null) {
+          intentVoice.putExtra("initiate", 0);
+          intentVoice.putExtra("CallId", channel.getAssisted());
+        }
+        startActivity(intentVoice);
+        break;
+      case R.id.toVideoActivity:
+        Intent intentToVideo = new Intent(CarerMapsActivity.this, VideoActivity.class);
+        intentToVideo.putExtra(getResources().getString(R.string.channel_key), channelId);
+        startActivity(intentToVideo);
+        break;
       default:
         break;
     }
+  }
+
+  @Override
+  public void onBackPressed() {
+    VoiceActivity.endCall();
+    super.onBackPressed();
+  }
+
+  public AlertDialog makeVideoAlert() {
+    alertDialog = new AlertDialog.Builder(this).create();
+    alertDialog.setTitle("Video Share?");
+    alertDialog.setMessage("Carer wants to share video with you  please also join the channel");
+    alertDialog.setButton(
+        AlertDialog.BUTTON_NEUTRAL,
+        "OK",
+        (dialog, which) -> {
+          Intent intentToVideo = new Intent(getApplicationContext(), VideoActivity.class);
+          intentToVideo.putExtra(
+              getApplicationContext().getResources().getString(R.string.channel_key), channelId);
+          getApplicationContext().startActivity(intentToVideo);
+        });
+    return alertDialog;
   }
 }

@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.quartz.zielclient.R;
-import com.quartz.zielclient.activities.carer.CarerChannel;
+import com.quartz.zielclient.activities.carer.CarerMapsActivity;
 import com.quartz.zielclient.models.ChannelRequest;
 
 import java.util.List;
@@ -51,7 +51,7 @@ public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.
 
     // Fetching the Names and Descriptions
     textViewHolder.textViewName.setText(channelRequest.getName());
-    textViewHolder.textViewDesc.setText(channelRequest.getDescription());
+    textViewHolder.textViewDesc.setText(channelRequest.formattedTimestamp());
 
     textViewHolder.setChannelId(channelRequest.getChannelId());
   }
@@ -85,7 +85,7 @@ public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.
 
     @Override
     public void onClick(View v) {
-      Intent intent = new Intent(context, CarerChannel.class);
+      Intent intent = new Intent(context, CarerMapsActivity.class);
       intent.putExtra(context.getResources().getString(R.string.channel_key), channelId);
       context.startActivity(intent);
     }

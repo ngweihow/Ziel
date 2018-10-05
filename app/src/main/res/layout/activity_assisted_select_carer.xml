@@ -4,27 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.assisted.AssistedSelectCarer">
+    tools:context=".activities.assisted.AssistedSelectCarerActivity"
+    tools:layout_editor_absoluteY="25dp">
 
     <Button
-        android:id="@+id/confirmCarerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="91dp"
-        android:text="Continue"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/carerEntry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="158dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Carer"
+        android:id="@+id/addCarerButton"
+        android:layout_width="0dp"
+        android:layout_height="77dp"
+        android:layout_marginBottom="5dp"
+        android:drawableLeft="@drawable/button_add_contact"
+        android:drawablePadding="20sp"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="36dp"
+        android:paddingTop="10dp"
+        android:text="Add Contact"
+        android:textAlignment="textStart"
+        android:background="#ffffff"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/carer_list_recycler_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/carer_list_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addCarerButton" />
+
+
 </android.support.constraint.ConstraintLayout>

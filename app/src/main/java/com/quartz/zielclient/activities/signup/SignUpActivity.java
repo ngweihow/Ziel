@@ -9,16 +9,19 @@ import android.widget.Button;
 
 import com.quartz.zielclient.R;
 
+import static android.Manifest.permission.READ_PHONE_STATE;
+
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
-  private Button button;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_signup);
 
-    button = findViewById(R.id.signup);
+    Button button = findViewById(R.id.signup);
     button.setOnClickListener(this);
+
+    requestPermissions(new String[]{READ_PHONE_STATE}, 1);
   }
 
   @Override

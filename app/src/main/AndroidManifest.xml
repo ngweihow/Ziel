@@ -6,14 +6,48 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ziel"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/ZielTheme">
+        <service android:name=".fcm.VoiceFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
-            android:name=".activities.SplashScreenActivity"
+            android:name=".activities.common.VideoActivity"
+            android:configChanges="orientation|screenSize">
+        </activity>
+        <activity
+            android:name=".activities.common.util.SettingsActivity"
+
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activities.common.VideoActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.quartz.zielclient.activities.common.VideoActivity" />
+        </activity>
+        <activity
+            android:exported="true"
+            android:name=".activities.common.SplashScreenActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,24 +60,13 @@
         <activity android:name=".activities.signup.ConfirmationCodeActivity" />
         <activity android:name=".activities.signup.AccountCreationActivity" />
         <activity
-            android:name=".activities.HomePageActivity"
+            android:name=".activities.assisted.AssistedHomePageActivity"
             android:label="@string/title_activity_home_page" />
-        <activity android:name=".activities.common.LaunchPadActivity" />
-        <activity
-            android:name=".activities.carer.CarerChannel"
-            android:label="@string/title_activity_carer_session"
-            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".activities.carer.CarerHomepageActivity"
-            android:label="@string/title_activity_carer_homepage" />
-        <activity
-            android:name=".activities.assisted.AssistedChannel"
-            android:label="@string/title_activity_assisted_session"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.common.ManualRedirect"
-            android:label="@string/title_activity_manual_redirect"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_carer_homepage"
+            android:launchMode="singleTask"/>
         <!--
            The API key for Google Maps-based APIs is defined as a string resource.
            (See the file "res/values/google_maps_api.xml").
@@ -54,18 +77,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-        <!--
-           The API key for Google Maps-based APIs is defined as a string resource.
-           (See the file "res/values/google_maps_api.xml").
-           Note that the API key is linked to the encryption key used to sign the APK.
-           You need a different API key for each encryption key, including the release key that is used to
-           sign the APK for publishing.
-           You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_api_key"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -78,7 +90,6 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".activities.assisted.AssistedSelectCarer" />
         <activity
             android:name=".activities.common.TextChatActivity"
             android:label="@string/title_activity_maps" />
@@ -89,10 +100,13 @@
 
         <activity
             android:name=".activities.carer.CarerMapsActivity"
-            android:label="@string/title_activity_carer_maps" />
+            android:label="@string/title_activity_carer_maps"
+            />
+
         <activity android:name=".activities.common.StreetViewActivity" />
         <activity android:name=".activities.assisted.AddCarerActivity" />
-        <activity android:name=".activities.assisted.AssistedSelectCarerActivity"></activity>
+        <activity android:name=".activities.assisted.AssistedSelectCarerActivity" />
+        <activity android:name=".activities.common.VoiceActivity"></activity>
     </application>
 
 </manifest>

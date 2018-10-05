@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".activities.assisted.AssistedHomePageActivity">
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/linearLayout2"
@@ -12,28 +13,23 @@
         android:layout_height="wrap_content">
 
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/AddCarerButton"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/addCarerButton"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="9dp"
-            android:layout_marginStart="9dp"
-            android:clickable="true"
-            app:backgroundTint="#faa004"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_add" />
-
-        <TextView
-            android:id="@+id/AddNewCarerText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/button_add_contact"
+            android:drawablePadding="20sp"
+            android:paddingBottom="16dp"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:text="Add New Carer"
-            android:textSize="30sp"
-            app:layout_constraintStart_toEndOf="@+id/AddCarerButton"
-            app:layout_constraintTop_toTopOf="@+id/AddCarerButton" />
+            android:paddingRight="36dp"
+            android:paddingTop="10dp"
+            android:text="Add Contact"
+            android:textColor="#000000"
+            android:textSize="25sp"
+
+            android:textAllCaps="false"
+            android:textAlignment="textStart"/>
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

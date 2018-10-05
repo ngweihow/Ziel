@@ -8,26 +8,40 @@
 
 
     <TextView
-        android:id="@+id/channelIdEntry"
-        android:layout_width="320dp"
-        android:layout_height="95dp"
-        android:layout_marginBottom="14dp"
+        android:id="@+id/channelIdEntry1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="46dp"
-        android:text="Ziel will send you an SMS message to verify your phone number. \nPlease enter your phone number:"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/phoneEntry"
+        android:layout_marginTop="53dp"
+        android:text="Phone Verification"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/channelIdEntry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
+    <TextView
+        android:id="@+id/channelIdEntry"
+        android:layout_width="0dp"
+        android:layout_height="107dp"
+        android:layout_marginEnd="31dp"
+        android:layout_marginStart="31dp"
+        android:text="Ziel will send you an SMS message to verify your phone number. \n*Please ensure country code is included"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/phoneEntry"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/channelIdEntry1" />
+
+
     <EditText
         android:id="@+id/phoneEntry"
-        android:layout_width="321dp"
-        android:layout_height="51dp"
-        android:layout_marginBottom="42dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="98dp"
         android:layout_marginEnd="31dp"
         android:layout_marginStart="31dp"
         android:ems="25"
@@ -35,21 +49,22 @@
         android:inputType="phone"
         app:layout_constraintBottom_toTopOf="@+id/confirmNumber"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/channelIdEntry" />
+    <!--app:layout_constraintHorizontal_bias="1.0"-->
 
 
     <Button
         android:id="@+id/confirmNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="250dp"
-        android:layout_marginEnd="30dp"
+        android:layout_width="146dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="135dp"
+        android:background="@drawable/whitebutton"
         android:text="@string/confirm"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/phoneEntry" />
 
 </android.support.constraint.ConstraintLayout>

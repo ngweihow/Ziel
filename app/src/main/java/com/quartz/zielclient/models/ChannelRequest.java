@@ -90,7 +90,7 @@ public class ChannelRequest implements Model, Comparable<ChannelRequest> {
 
   @Override
   public int compareTo(@NonNull ChannelRequest o) {
-    return Long.compare(timestamp, o.timestamp);
+    return Long.compare(o.timestamp,timestamp);
   }
 
   @Override

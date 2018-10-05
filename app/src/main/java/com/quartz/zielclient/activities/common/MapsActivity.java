@@ -30,6 +30,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.quartz.zielclient.R;
 import com.quartz.zielclient.channel.ChannelController;
@@ -50,16 +51,15 @@ import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED;
 
 /**
  * This class is responsible for handling all map activities.
- * <p>
- * Courtesy : https://stackoverflow.com/questions/44992014/
+ *
+ * <p>Courtesy : https://stackoverflow.com/questions/44992014/
  * how-to-get-current-location-in-googlemap-using-fusedlocationproviderclient/44993694#44993694
  *
  * @author Armaan McLeod
- * @version 1.1
- * 19/09/2018
+ * @version 1.1 19/09/2018
  */
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, ChannelListener,
-    View.OnClickListener {
+public class MapsActivity extends AppCompatActivity
+    implements OnMapReadyCallback, ChannelListener, View.OnClickListener {
 
   // Custom permissions request code
   private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -74,55 +74,65 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
   private FusedLocationProviderClient mFusedLocationClient;
 
   private LatLng source;
+  private Marker sourceMarker;
+  private Marker destinationMarker;
   private LatLng destination;
-
+  private LatLng currentDestination;
   private String channelId;
-
+  private AlertDialog alertDialog;
   private ChannelData channel;
+  private final LocationCallback mLocationCallback =
+      new LocationCallback() {
 
-  private final LocationCallback mLocationCallback = new LocationCallback() {
+        /**
+         * Moves camera to last known location of user.
+         *
+         * @param locationResult location results fetched from API.
+         */
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
 
-    /**
-     * Moves camera to last known location of user.
-     * @param locationResult location results fetched from API.
-     */
-    @Override
-    public void onLocationResult(LocationResult locationResult) {
+          // All previous locations
+          List<Location> locationList = locationResult.getLocations();
 
-      // All previous locations
-      List<Location> locationList = locationResult.getLocations();
+          // If one location exists
+          if (!locationList.isEmpty()) {
 
-      // If one location exists
-      if (!locationList.isEmpty()) {
+            // The last location in the list is the newest
+            Location location = locationList.get(locationList.size() - 1);
+            Log.i(activity, "Location: " + location.getLatitude() + " " + location.getLongitude());
 
-        // The last location in the list is the newest
-        Location location = locationList.get(locationList.size() - 1);
-        Log.i(activity, "Location: "
-            + location.getLatitude()
-            + " "
-            + location.getLongitude());
+            LatLng newSource = new LatLng(location.getLatitude(), location.getLongitude());
 
-        LatLng newSource = new LatLng(location.getLatitude(), location.getLongitude());
+            // Only draw onto map for first callback or if source location has changed.
+            // Ensures directions api doesn't get called too many times on start up.
+            // draw both source and destination markers to map screen
+            // Execute channel is available
+            if (channel != null) {
+              channel.setAssistedLocation(location);
+            }
 
-        // Only draw onto map for first callback or if source location has changed.
-        // Ensures directions api doesn't get called too many times on start up.
-        if (source == null || !newSource.equals(source)) {
-          source = newSource;
-          drawOntoMap();
+            mGoogleMap.clear();
+            source = newSource;
+
+            drawMarker(newSource, HUE_MAGENTA);
+            drawMarker(destination, HUE_RED);
+            Log.d("DESTINATION CHANGE", destination.toString());
+            if (currentDestination==null || !destination.equals(currentDestination)) {
+              currentDestination = destination;
+              drawRoute();
+
+              // Zoom in on map location
+              mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(source, DEFAULT_ZOOM));
+            }
+          }
         }
-
-        // Execute channel is available
-        if (channel != null) {
-          channel.setAssistedLocation(location);
-        }
-      }
-    }
-  };
+      };
 
   /**
    * Creates map along with its attributes.
-   * <p>
-   * Documentation : https://developer.android.com/reference/android/app/
+   *
+   * <p>Documentation : https://developer.android.com/reference/android/app/
    * Activity.html#onCreate(android.os.Bundle)
    *
    * @param savedInstanceState This is responsible for saving state of map activities.
@@ -131,15 +141,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_maps);
-
     // Initialise channel
     channelId = getIntent().getStringExtra(getResources().getString(R.string.channel_key));
     if (channelId != null) {
       channel = ChannelController.retrieveChannel(channelId, this);
     }
 
+    Intent intentVoice = new Intent(MapsActivity.this, VoiceActivity.class);
+    intentVoice.putExtra("initiate", 1);
+    startActivity(intentVoice);
+    alertDialog = makeVideoAlert();
+
+    // Create buttons and listeners below
+    Button toVideoChatButton = findViewById(R.id.toVideoChatButton);
+    toVideoChatButton.setOnClickListener(this);
+
     Button toTextChatButton = findViewById(R.id.toTextChat);
     toTextChatButton.setOnClickListener(this);
+
+    Button toVoiceChatButton = findViewById(R.id.toVoiceChat);
+    toVoiceChatButton.setOnClickListener(this);
 
     // Get bundle of arguments passed from Home Page Activity
     Bundle bundle = getIntent().getExtras();
@@ -148,60 +169,52 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     // Create autocomplete bar
-    PlaceAutocompleteFragment placeAutoComplete = (PlaceAutocompleteFragment)
-        getFragmentManager().findFragmentById(R.id.place_autocomplete);
+    PlaceAutocompleteFragment placeAutoComplete =
+        (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete);
     Objects.requireNonNull(placeAutoComplete.getView()).setBackgroundColor(Color.WHITE);
 
     // Listen for new places queried in search bar
-    placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+    placeAutoComplete.setOnPlaceSelectedListener(
+        new PlaceSelectionListener() {
 
-      @Override
-      public void onPlaceSelected(Place place) {
-        // Clear all previous points on map
-        mGoogleMap.clear();
+          @Override
+          public void onPlaceSelected(Place place) {
+            // Clear all previous points on map
+            mGoogleMap.clear();
 
-        Log.d(activity, "Place selected: " + place.getLatLng());
-        destination = place.getLatLng();
+            Log.d(activity, "Place selected: " + place.getLatLng());
+            destination = place.getLatLng();
+            drawMarker(source, HUE_MAGENTA);
+            drawMarker(destination, HUE_RED);
 
-        drawOntoMap();
-      }
+            // Zoom in on map location
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(source, DEFAULT_ZOOM));
+          }
 
-      @Override
-      public void onError(@NonNull Status status) {
-        Log.d(activity, "An error occurred: " + status);
-      }
-    });
+          @Override
+          public void onError(@NonNull Status status) {
+            Log.d(activity, "An error occurred: " + status);
+          }
+        });
 
     // Create fused location client to interact with API
     mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
     // Place map in application
-    SupportMapFragment mapFrag = (SupportMapFragment) getSupportFragmentManager()
-        .findFragmentById(R.id.map);
+    SupportMapFragment mapFrag =
+        (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
     if (mapFrag != null) {
       mapFrag.getMapAsync(this);
     }
   }
 
-  /**
-   * Draws source/destination markers and route onto map.
-   */
-  private void drawOntoMap() {
-    // draw both source and destination markers to map screen
-    drawMarker(source, HUE_MAGENTA);
-    drawMarker(destination, HUE_RED);
-
-    // Draw route to map screen
-    drawRoute();
-  }
-
-  /**
-   * Draws route between two points on the map
-   */
+  /** Draws route between two points on the map */
   private void drawRoute() {
+
     // Compute path to destination
     String directionsURL = getDirectionsUrl();
+
     FetchUrl fetchUrl = new FetchUrl(mGoogleMap);
     fetchUrl.execute(directionsURL);
 
@@ -215,7 +228,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
    * Draws marker on the Google map.
    *
    * @param location This is the location on the map.
-   * @param colour   This is the colour of the marker.
+   * @param colour This is the colour of the marker.
    */
   private void drawMarker(@NonNull LatLng location, float colour) {
     MarkerOptions markerOptions = new MarkerOptions();
@@ -232,9 +245,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     // Add marker to the map
     mGoogleMap.addMarker(markerOptions).showInfoWindow();
-
-    // Zoom in on map location
-    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
   }
 
   /**
@@ -251,9 +261,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     try {
 
       // Only retrieve the rop result
-      List<Address> addresses = geocoder.getFromLocation(location.latitude,
-          location.longitude,
-          1);
+      List<Address> addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1);
       address = addresses.get(0).getAddressLine(0);
     } catch (IOException e) {
       Log.d(activity, "getAddress: Cannot fetch address");
@@ -264,8 +272,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
   /**
    * This is called when user received an event call.
-   * <p>
-   * Documentation : https://developers.google.com/android/reference/com/google/android/gms/maps/
+   *
+   * <p>Documentation : https://developers.google.com/android/reference/com/google/android/gms/maps/
    * OnMapReadyCallback.html#onMapReady(com.google.android.gms.maps.GoogleMap)
    */
   @Override
@@ -290,12 +298,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     mGoogleMap = googleMap;
 
     // Set listener for markers
-    mGoogleMap.setOnMarkerClickListener(marker -> {
-      Intent intent = new Intent(MapsActivity.this, StreetViewActivity.class);
-      intent.putExtra("destination", marker.getPosition());
-      startActivity(intent);
-      return true;
-    });
+    mGoogleMap.setOnMarkerClickListener(
+        marker -> {
+          Intent intent = new Intent(MapsActivity.this, StreetViewActivity.class);
+          intent.putExtra("destination", marker.getPosition());
+          startActivity(intent);
+          return true;
+        });
 
     // Setup location request and intervals between requests
     mLocationRequest = new LocationRequest();
@@ -307,14 +316,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     if (checkSelfPermission(ACCESS_FINE_LOCATION) == PERMISSION_GRANTED) {
       requestLocation();
     } else {
-      //Request Location Permission
+      // Request Location Permission
       requestLocationPermission();
     }
   }
 
-  /**
-   * Check location permissions before showing user location.
-   */
+  /** Check location permissions before showing user location. */
   private void requestLocationPermission() {
     // If permission is not granted
     if (checkSelfPermission(ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
@@ -328,39 +335,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         new AlertDialog.Builder(this)
             .setTitle("Location Permission Needed")
             .setMessage(
-                "This app needs the Location permission, " +
-                    "please accept to use location functionality")
-
-            .setPositiveButton("OK",
-                //Prompt the user once explanation has been shown
+                "This app needs the Location permission, "
+                    + "please accept to use location functionality")
+            .setPositiveButton(
+                "OK",
+                // Prompt the user once explanation has been shown
                 (dialogInterface, i) ->
-                    requestPermissions(new String[]{ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION))
+                    requestPermissions(
+                        new String[] {ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION))
             .create()
             .show();
 
       } else {
         // No explanation needed, we can request the permission.
-        requestPermissions(new String[]{ACCESS_FINE_LOCATION},
-            MY_PERMISSIONS_REQUEST_LOCATION);
+        requestPermissions(new String[] {ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
       }
     }
   }
 
   /**
    * This is a callback for requesting and checking the result of a permission.
-   * <p>
-   * Documentation : https://developer.android.com/reference/android/support/v4/app/
+   *
+   * <p>Documentation : https://developer.android.com/reference/android/support/v4/app/
    * ActivityCompat.OnRequestPermissionsResultCallback#onRequestPermissionsResult
    *
-   * @param requestCode  This is the request code passed to requestPermissions.
-   * @param permissions  This is the permissions.
+   * @param requestCode This is the request code passed to requestPermissions.
+   * @param permissions This is the permissions.
    * @param grantResults This is results for granted or un-granted permissions.
    */
   @Override
-  public void onRequestPermissionsResult(int requestCode,
-                                         @NonNull String[] permissions,
-                                         @NonNull int[] grantResults) {
+  public void onRequestPermissionsResult(
+      int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
     if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {
       handleLocationPermission(grantResults);
     }
@@ -381,15 +386,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
   }
 
-  /**
-   * This enables the location to be shown on the map.
-   */
+  /** This enables the location to be shown on the map. */
   private void requestLocation() {
     // Permission was granted so we can enable user location
     if (checkSelfPermission(ACCESS_FINE_LOCATION) == PERMISSION_GRANTED) {
-      mFusedLocationClient.requestLocationUpdates(mLocationRequest,
-          mLocationCallback,
-          Looper.myLooper());
+      mFusedLocationClient.requestLocationUpdates(
+          mLocationRequest, mLocationCallback, Looper.myLooper());
       mGoogleMap.setMyLocationEnabled(true);
     }
   }
@@ -403,9 +405,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     // Source and destination formats
     String strSource = "origin=" + source.latitude + "," + source.longitude;
-    String strDestination = "destination=" +
-        destination.latitude + "," +
-        destination.longitude;
+    String strDestination = "destination=" + destination.latitude + "," + destination.longitude;
 
     // Sensor initialisation
     String sensor = "sensor=false";
@@ -425,16 +425,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
   @Override
   public void dataChanged() {
     // notify user about new messages
-  }
+    if (channel != null) {
 
-  @Override
-  public String getAssistedId() {
-    return null;
-  }
-
-  @Override
-  public String getCarerId() {
-    return null;
+      if (channel.getVideoCallStatus()) {
+        alertDialog.show();
+      } else {
+        alertDialog.cancel();
+      }
+    }
   }
 
   /**
@@ -444,12 +442,49 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
    */
   @Override
   public void onClick(@NonNull View view) {
-    int i = view.getId();
-    if (i == R.id.toTextChat) {
-      Intent intentToTextChat = new Intent(MapsActivity.this, TextChatActivity.class);
-      intentToTextChat.putExtra(getResources().getString(R.string.channel_key), channelId);
-      startActivity(intentToTextChat);
-
+    switch (view.getId()) {
+      case R.id.toTextChat:
+        Intent intentToTextChat = new Intent(MapsActivity.this, TextChatActivity.class);
+        intentToTextChat.putExtra(getResources().getString(R.string.channel_key), channelId);
+        startActivity(intentToTextChat);
+        break;
+      case R.id.toVoiceChat:
+        Intent intentVoice = new Intent(MapsActivity.this, VoiceActivity.class);
+        intentVoice.putExtra("initiate", 0);
+        if (channel != null) {
+          intentVoice.putExtra("CallId", channel.getCarer());
+        }
+        startActivity(intentVoice);
+        break;
+      case R.id.toVideoChatButton:
+        Intent intentToVideo = new Intent(MapsActivity.this, VideoActivity.class);
+        intentToVideo.putExtra(getResources().getString(R.string.channel_key), channelId);
+        startActivity(intentToVideo);
+        break;
+      default:
+        break;
     }
+  }
+
+  @Override
+  public void onBackPressed() {
+    VoiceActivity.endCall();
+    super.onBackPressed();
+  }
+
+  public AlertDialog makeVideoAlert() {
+    alertDialog = new AlertDialog.Builder(this).create();
+    alertDialog.setTitle("Video Share?");
+    alertDialog.setMessage("Carer wants to share video with you  please also join the channel");
+    alertDialog.setButton(
+        AlertDialog.BUTTON_NEUTRAL,
+        "OK",
+        (dialog, which) -> {
+          Intent intentToVideo = new Intent(getApplicationContext(), VideoActivity.class);
+          intentToVideo.putExtra(
+              getApplicationContext().getResources().getString(R.string.channel_key), channelId);
+          getApplicationContext().startActivity(intentToVideo);
+        });
+    return alertDialog;
   }
 }
