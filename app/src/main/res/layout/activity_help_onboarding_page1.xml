@@ -10,61 +10,69 @@
     <ImageView
         android:id="@+id/onboarding_image1"
         android:layout_width="178dp"
-        android:layout_height="0dp"
+        android:layout_height="167dp"
         android:layout_marginBottom="17dp"
         android:layout_marginTop="69dp"
-        app:layout_constraintBottom_toTopOf="@+id/onboarding_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@drawable/single_marker" />
 
     <TextView
         android:id="@+id/onboarding_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="9dp"
         android:layout_marginStart="24dp"
-        android:text="TextView"
+        android:text="Welcome"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/onboarding_description"
         app:layout_constraintStart_toStartOf="@+id/onboarding_image1"
-        app:layout_constraintTop_toBottomOf="@+id/onboarding_image1"
-        tools:text="Welcome" />
+        app:layout_constraintTop_toBottomOf="@+id/onboarding_image1" />
 
     <TextView
         android:id="@+id/onboarding_description"
-        android:layout_width="242dp"
-        android:layout_height="97dp"
+        android:layout_width="264dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="22dp"
-        android:text="TextView"
-        android:textSize="15dp"
+        android:layout_marginEnd="71dp"
+        android:layout_marginStart="71dp"
+        android:text="Connecting with your loved ones to receive virtual assistance immediately.  \nTo receive help from a carer to reach your destination at anytime.\n"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/next1"
-        app:layout_constraintEnd_toEndOf="@+id/signup"
-        app:layout_constraintStart_toEndOf="@+id/signup"
-        app:layout_constraintTop_toBottomOf="@+id/onboarding_title"
-        tools:text="Connecting with your loved ones to receive virtual assistance immediately.  \nTo receive help from a carer to reach your destination at anytime.  " />
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/signup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/onboarding_title" />
 
     <Button
         android:id="@+id/signup"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="94dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginStart="70dp"
+        android:background="@drawable/whitebutton"
         android:text="Skip"
-        app:layout_constraintBaseline_toBaselineOf="@+id/next1"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/next1"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/onboarding_description" />
 
     <Button
         android:id="@+id/next1"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="94dp"
+        android:layout_marginEnd="72dp"
+        android:background="@drawable/whitebutton"
         android:text="Next"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/signup"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/signup"
-        app:layout_constraintTop_toBottomOf="@+id/onboarding_description" />
+        app:layout_constraintStart_toEndOf="@+id/signup"  />
 </android.support.constraint.ConstraintLayout>

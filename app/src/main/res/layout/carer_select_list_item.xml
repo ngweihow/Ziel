@@ -51,10 +51,10 @@
                 android:id="@+id/carerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="18dp"
                 android:text="Name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="25sp"
+                android:textSize="23sp"
 
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView4"
@@ -74,8 +74,8 @@
 
         <Button
             android:id="@+id/createChannelButton"
-            android:layout_width="109dp"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginRight="16dp"
             android:layout_marginVertical="@dimen/list_button_vertical_margin"

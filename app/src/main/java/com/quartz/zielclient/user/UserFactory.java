@@ -3,10 +3,8 @@ package com.quartz.zielclient.user;
 import android.os.Bundle;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.GenericTypeIndicator;
 
 import java.util.Map;
-import java.util.Optional;
 
 import static com.quartz.zielclient.user.User.FIRST_NAME_KEY;
 import static com.quartz.zielclient.user.User.IS_ASSISTED_KEY;

@@ -10,53 +10,53 @@
     <ImageView
         android:id="@+id/onboarding_image3"
         android:layout_width="178dp"
-        android:layout_height="0dp"
+        android:layout_height="167dp"
         android:layout_marginBottom="17dp"
         android:layout_marginTop="69dp"
         app:layout_constraintBottom_toTopOf="@+id/onboarding_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@drawable/two_users" />
 
     <TextView
         android:id="@+id/onboarding_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="9dp"
         android:layout_marginStart="36dp"
-        android:text="TextView"
+        android:text="Contact"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/onboarding_description"
         app:layout_constraintStart_toStartOf="@+id/onboarding_image3"
-        app:layout_constraintTop_toBottomOf="@+id/onboarding_image3"
-        tools:text="Contact" />
+        app:layout_constraintTop_toBottomOf="@+id/onboarding_image3" />
 
     <TextView
         android:id="@+id/onboarding_description"
-        android:layout_width="0dp"
-        android:layout_height="97dp"
+        android:layout_width="264dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="22dp"
         android:layout_marginEnd="70dp"
         android:layout_marginStart="70dp"
-        android:text="TextView"
         android:textAlignment="center"
-        android:textSize="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/signup"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/signup3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/onboarding_title"
-        tools:text="
-Virtually contact carer by messaging, calling or video calling to receive immediate help to help reach you destination" />
+        android:text="Virtually contact carer by messaging, calling or video calling to receive immediate help to help reach you destination" />
 
     <Button
-        android:id="@+id/signup"
-        android:layout_width="wrap_content"
+        android:id="@+id/signup3"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="94dp"
-        android:layout_marginEnd="148dp"
+        android:background="@drawable/whitebutton"
         android:text="Sign Up"
+        android:textAllCaps="false"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/onboarding_description" />
 </android.support.constraint.ConstraintLayout>

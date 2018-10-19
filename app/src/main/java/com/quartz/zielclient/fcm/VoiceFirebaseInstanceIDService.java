@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-import com.quartz.zielclient.activities.common.VoiceActivity;
+import com.quartz.zielclient.activities.channel.VoiceActivity;
 
 public class VoiceFirebaseInstanceIDService extends FirebaseInstanceIdService {
 

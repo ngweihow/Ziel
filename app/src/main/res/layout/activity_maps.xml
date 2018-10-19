@@ -8,7 +8,54 @@
     android:weightSum="1"
     android:windowTranslucentNavigation="true"
     android:windowTranslucentStatus="true"
-    tools:context=".activities.common.MapsActivity">
+    tools:context=".activities.channel.MapsActivity">
+
+    <Button
+        android:id="@+id/endChannelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="15dp"
+        android:drawableLeft="@drawable/ic_close1"
+        android:onClick="makeChannelEndedAlert"
+        android:text="  End Connection"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@+id/place_autocomplete"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
+
+
+    <Button
+        android:id="@+id/toRedrawRouteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:drawableLeft="@drawable/ic_redraw_route_48"
+        android:text="  Redraw Route"
+        android:layout_marginTop="10dp"
+        android:textAllCaps="false"
+        android:layout_marginLeft="10dp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="85dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/endChannelButton" />
+
+    <Button
+        android:id="@+id/toTakePhotoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:drawableLeft="@drawable/ic_landmark1"
+        android:text="  Landmark Recognition "
+        android:layout_marginTop="10dp"
+        android:textAllCaps="false"
+        android:layout_marginLeft="10dp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="85dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toRedrawRouteButton" />
 
     <fragment
         android:id="@+id/place_autocomplete"
@@ -29,7 +76,10 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/place_autocomplete" />
+        app:layout_constraintTop_toBottomOf="@+id/place_autocomplete">
+
+
+    </fragment>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/linearLayout2"
@@ -40,6 +90,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/map">
+
 
         <Button
             android:id="@+id/toTextChat"
@@ -91,7 +142,39 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/toVoiceChat"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/waitForCarerMessage"
+            android:layout_width="237dp"
+            android:layout_height="90dp"
+            android:background="#f1ecec"
+            android:drawableLeft="@drawable/ic_wait"
+            android:text="Please wait for carer to respond in order to use the calling features."
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/newMessage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/newMessage"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/red_round_button"
+            android:elevation="2dp"
+            app:layout_constraintBottom_toBottomOf="@+id/toVoiceChat"
+            app:layout_constraintStart_toStartOf="@+id/toTextChat"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/exclamation_icon" />
+
+
+
     </android.support.constraint.ConstraintLayout>
-
-
 </android.support.constraint.ConstraintLayout>

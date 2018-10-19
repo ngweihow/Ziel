@@ -4,56 +4,128 @@
     android:id="@+id/CarerMapsActivityId"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:fitsSystemWindows="true"
     android:weightSum="1"
-    tools:context=".activities.carer.CarerMapsActivity"
+    android:windowTranslucentNavigation="true"
+    android:windowTranslucentStatus="true"
+    tools:context="activities.carer.CarerMapsActivity"
     tools:layout_editor_absoluteY="25dp">
+
+    <Button
+        android:id="@+id/dropMarker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        android:drawableLeft="@drawable/ic_dropmarkerpurple"
+        android:text="  Drop marker"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/clearMarker"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/clearMarker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="355dp"
+        android:layout_marginStart="16dp"
+        android:background="@android:color/transparent"
+        android:drawableLeft="@drawable/ic_remove_markerpurple"
+        android:text="  Clear Markers"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dropMarker" />
+
 
     <fragment
         android:id="@+id/map"
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/toVoiceChat"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/toTextChat"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="To Text Chat"
+        android:layout_height="0dp"
+        android:fitsSystemWindows="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toVoiceChat" />
+        app:layout_constraintTop_toBottomOf="@+id/clearMarker">
 
-    <Button
-        android:id="@+id/toVoiceChat"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="14dp"
-        android:text="Voice Chat"
-        app:layout_constraintBottom_toTopOf="@+id/toTextChat"
-        app:layout_constraintEnd_toStartOf="@+id/toVideoActivity"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/map" />
+        <Button
+            android:id="@+id/toTextChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawablePadding="-15sp"
+            android:drawableTop="@drawable/ic_phone_message"
+            android:scaleType="fitCenter"
+            android:text="\nMessage"
+            android:textAllCaps="false"
+            android:textColor="#a7a3a3"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/toVoiceChat"
+            app:layout_constraintEnd_toStartOf="@+id/toVoiceChat"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/toVoiceChat"
+            app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/toVideoActivity"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="23dp"
-        android:text="VIDEO CHAT"
-        app:layout_constraintBaseline_toBaselineOf="@+id/toVoiceChat"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/toVoiceChat" />
+        <Button
+            android:id="@+id/toVoiceChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawablePadding="-15sp"
+            android:drawableTop="@drawable/ic_phone_call"
+            android:scaleType="fitCenter"
+            android:text="\nCall"
+            android:textAllCaps="false"
+            android:textColor="#a7a3a3"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/toVideoActivity"
+            app:layout_constraintEnd_toStartOf="@+id/toVideoActivity"
+            app:layout_constraintStart_toEndOf="@+id/toTextChat"
+            app:layout_constraintTop_toTopOf="@+id/toVideoActivity" />
+
+        <Button
+            android:id="@+id/toVideoActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawablePadding="-15sp"
+            android:drawableTop="@drawable/ic_phone_video"
+            android:scaleType="fitCenter"
+            android:text="\nVideo Call"
+            android:textAllCaps="false"
+            android:textColor="#a7a3a3"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/toVoiceChat"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/newMessageIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/red_round_button"
+            android:src="@drawable/exclamation_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/toVoiceChat"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+    </android.support.constraint.ConstraintLayout>
 
 
 </android.support.constraint.ConstraintLayout>

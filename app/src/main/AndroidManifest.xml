@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -13,13 +14,15 @@
         android:required="true" />
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ziel"
@@ -31,23 +34,19 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service android:name=".fcm.VoiceFirebaseInstanceIDService" />
 
         <activity
-            android:name=".activities.common.VideoActivity"
-            android:configChanges="orientation|screenSize">
-        </activity>
+            android:name=".activities.channel.VideoActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Video Call" />
         <activity
-            android:name=".activities.common.util.SettingsActivity"
-
+            android:name=".activities.common.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.common.VideoActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.quartz.zielclient.activities.common.VideoActivity" />
-        </activity>
+            android:parentActivityName=".activities.common.SettingsHome" />
         <activity
-            android:exported="true"
             android:name=".activities.common.SplashScreenActivity"
+            android:exported="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,18 +54,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.signup.SignUpActivity" />
-        <activity android:name=".activities.signup.VerifyPhoneNumberActivity" />
-        <activity android:name=".activities.signup.ConfirmationCodeActivity" />
-        <activity android:name=".activities.signup.AccountCreationActivity" />
+        <activity
+            android:name=".activities.signup.SignUpActivity"
+            android:label="Welcome!" />
+        <activity
+            android:name=".activities.signup.VerifyPhoneNumberActivity"
+            android:label="Phone Verification" />
+        <activity
+            android:name=".activities.signup.ConfirmationCodeActivity"
+            android:label="SMS Code" />
+        <activity
+            android:name=".activities.signup.AccountCreationActivity"
+            android:label="Account Creation" />
         <activity
             android:name=".activities.assisted.AssistedHomePageActivity"
             android:label="@string/title_activity_home_page" />
-
         <activity
             android:name=".activities.carer.CarerHomepageActivity"
             android:label="@string/title_activity_carer_homepage"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTop" />
         <!--
            The API key for Google Maps-based APIs is defined as a string resource.
            (See the file "res/values/google_maps_api.xml").
@@ -75,24 +81,26 @@
            sign the APK for publishing.
            You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
+        <!--suppress AndroidDomInspection -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_api_key"/>
+            android:value="@string/google_api_key" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name=".activities.common.MapsActivity"
-            android:label="@string/title_activity_maps" />
+            android:name=".activities.channel.MapsActivity"
+            android:label="@string/title_activity_maps"
+            android:launchMode="singleTop" />
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
         <activity
-            android:name=".activities.common.TextChatActivity"
-            android:label="@string/title_activity_maps" />
+            android:name=".activities.channel.TextChatActivity"
+            android:label="@string/text_chat" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -100,13 +108,35 @@
 
         <activity
             android:name=".activities.carer.CarerMapsActivity"
-            android:label="@string/title_activity_carer_maps"
-            />
-
-        <activity android:name=".activities.common.StreetViewActivity" />
-        <activity android:name=".activities.assisted.AddCarerActivity" />
-        <activity android:name=".activities.assisted.AssistedSelectCarerActivity" />
-        <activity android:name=".activities.common.VoiceActivity"></activity>
+            android:label="@string/title_activity_carer_maps" />
+        <activity android:name=".activities.channel.StreetViewActivity" />
+        <activity
+            android:name=".activities.assisted.AddCarerActivity"
+            android:label="Add a contact" />
+        <activity
+            android:name=".activities.assisted.AssistedSelectCarerActivity"
+            android:label="Select a carer" />
+        <activity
+            android:name=".activities.channel.VoiceActivity"
+            android:label="Voice Call"
+            android:launchMode="singleTop"/>
+        <activity
+            android:name=".activities.onboarding.OnboardingActivity"
+            android:label="Welcome!" />
+        <activity
+            android:name=".activities.onboarding.SecondOnboardingActivity"
+            android:label="Map" />
+        <activity
+            android:name=".activities.onboarding.FinalOnboardingActivity"
+            android:label="Contact" />
+        <activity
+            android:name=".activities.channel.TakePhotosActivity"
+            android:label="@string/title_activity_take_photos" />
+        <activity
+            android:name=".activities.common.FeedbackActivity"
+            android:label="Feedback"
+            android:parentActivityName=".activities.common.SettingsHome" />
+        <activity android:name=".activities.common.SettingsHome" />
     </application>
 
 </manifest>

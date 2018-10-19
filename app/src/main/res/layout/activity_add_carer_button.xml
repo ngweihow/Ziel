@@ -20,14 +20,14 @@
             android:layout_marginTop="26dp"
             android:background="@android:color/transparent"
             android:drawableLeft="@drawable/button_add_contact"
-            android:drawablePadding="20sp"
+            android:drawablePadding="18sp"
             android:paddingBottom="16dp"
             android:paddingLeft="16dp"
             android:paddingRight="36dp"
             android:paddingTop="10dp"
             android:text="Add Contact"
             android:textColor="#000000"
-            android:textSize="25sp"
+            android:textSize="23sp"
 
             android:textAllCaps="false"
             android:textAlignment="textStart"/>

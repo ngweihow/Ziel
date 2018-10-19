@@ -16,8 +16,10 @@ import android.support.v7.app.AlertDialog;
 import com.quartz.zielclient.R;
 import com.quartz.zielclient.activities.carer.CarerHomepageActivity;
 import com.quartz.zielclient.activities.carer.CarerMapsActivity;
-import com.quartz.zielclient.activities.common.SoundPoolManager;
+import com.quartz.zielclient.channel.ChannelController;
+import com.quartz.zielclient.channel.ChannelData;
 import com.quartz.zielclient.models.ChannelRequest;
+import com.quartz.zielclient.voip.SoundPoolManager;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static android.view.View.VISIBLE;
@@ -29,36 +31,36 @@ import static android.view.View.VISIBLE;
  */
 public class NotificationHandler {
 
-  private final Context context;
+  private final CarerHomepageActivity carerHomepageActivity;
   private NotificationManager notificationManager;
   private Vibrator vibrator;
   private SoundPoolManager soundPoolManager;
   private AlertDialog alertUser;
   private ChannelRequest channelRequest;
 
-  public NotificationHandler(Context context) {
-    this.context = context;
-    vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-    soundPoolManager = SoundPoolManager.getInstance(context);
+  public NotificationHandler(CarerHomepageActivity carerHomepageActivity) {
+    this.carerHomepageActivity = carerHomepageActivity;
+    vibrator = (Vibrator) carerHomepageActivity.getSystemService(Context.VIBRATOR_SERVICE);
+    soundPoolManager = SoundPoolManager.getInstance(carerHomepageActivity);
   }
 
   public static PendingIntent newLauncherIntent(final Context context) {
     Intent notificationIntent = new Intent(context, CarerHomepageActivity.class);
     notificationIntent.setAction(Intent.ACTION_MAIN);
     notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-    PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-    return intent;
+    return PendingIntent.getActivity(context, 0, notificationIntent, 0);
   }
 
   public void createNotificationChannel() {
     // get the system service for notifications
-    notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+    notificationManager =
+        (NotificationManager) carerHomepageActivity.getSystemService(NOTIFICATION_SERVICE);
     // begin creating notification channels
     String id = "helpChannel";
     // The user-visible name of the channel.
     CharSequence name = "Assisted";
     // The user-visible description of the channel.
-    String description = context.getString(R.string.notificationChannelDescription);
+    String description = carerHomepageActivity.getString(R.string.notificationChannelDescription);
     NotificationChannel mChannel =
         new NotificationChannel(id, name, NotificationManager.IMPORTANCE_HIGH);
     // Configure the notification channel.
@@ -74,12 +76,13 @@ public class NotificationHandler {
   public void notifyUserToOpenApp(ChannelRequest channelRequest) {
     // creates a notification for the user
     this.channelRequest = channelRequest;
-    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(carerHomepageActivity);
     alertDialogBuilder.setIcon(R.drawable.ic_call_black_24dp);
     alertDialogBuilder.setTitle("Help Wanted!");
     alertDialogBuilder.setPositiveButton("Accept", answerHelpClickListener());
     alertDialogBuilder.setNegativeButton("Reject", declineHelpToListener());
     alertDialogBuilder.setMessage(channelRequest.getName() + "Needs your help");
+
     alertUser = alertDialogBuilder.create();
     alertUser.show();
 
@@ -88,14 +91,14 @@ public class NotificationHandler {
       soundPoolManager.playRinging();
     }
     NotificationCompat.Builder notificationBuilder =
-        new NotificationCompat.Builder(context, "helpChannel")
+        new NotificationCompat.Builder(carerHomepageActivity, "helpChannel")
             .setSmallIcon(R.mipmap.ziel_logo) // your app icon
             .setBadgeIconType(R.mipmap.ziel_logo) // your app icon
             .setChannelId("helpChannel")
             .setContentTitle(channelRequest.getName() + " Requires your assistance")
             .setAutoCancel(true)
             .setNumber(1)
-            .setContentIntent(newLauncherIntent(context))
+            .setContentIntent(newLauncherIntent(carerHomepageActivity))
             .setContentText("Please open App")
             .setWhen(System.currentTimeMillis())
             .setVibrate(new long[] {1000, 1000, 1000, 1000, 1000})
@@ -108,21 +111,25 @@ public class NotificationHandler {
     vibrator.cancel();
     soundPoolManager.stopRinging();
     alertUser.dismiss();
-
   }
 
   private DialogInterface.OnClickListener answerHelpClickListener() {
     return (dialog, which) -> {
-      Intent intent = new Intent(context, CarerMapsActivity.class);
+      Intent intent = new Intent(carerHomepageActivity, CarerMapsActivity.class);
       intent.putExtra(
-          context.getResources().getString(R.string.channel_key), channelRequest.getChannelId());
-      context.startActivity(intent);
+          carerHomepageActivity.getResources().getString(R.string.channel_key), channelRequest.getChannelId());
+      carerHomepageActivity.startActivity(intent);
       stopVibratingDevice();
     };
   }
 
   private DialogInterface.OnClickListener declineHelpToListener() {
     return (dialog, which) -> {
+      ChannelData channel =
+          ChannelController.retrieveChannel(channelRequest.getChannelId(), () -> {});
+      if (channel != null) {
+        channel.endChannel();
+      }
       stopVibratingDevice();
     };
   }

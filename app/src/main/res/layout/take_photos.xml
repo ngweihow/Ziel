@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.wonderkiln.camerakit.CameraView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/camera"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"></com.wonderkiln.camerakit.CameraView>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Landmark Recognition"
+        android:background="#ffffff"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/blurb"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/title"
+        android:background="#ffffff"
+        android:text="Take a photo or choose a photo from gallery and we will identify what landmark you are located near"
+        android:textSize="15sp" />
+
+
+    <Button
+        android:id="@+id/camera_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="11dp"
+        android:layout_marginStart="80dp"
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/ic_gallery1"
+        android:textAllCaps="false"
+        tools:layout_editor_absoluteX="135dp"
+        tools:layout_editor_absoluteY="492dp" />
+
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="148dp"
+        android:layout_height="187dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/blurb"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/picture"
+        android:scaleType="fitXY" />
+
+    <Button
+        android:id="@+id/gallery_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/camera_button"
+        android:layout_marginBottom="11dp"
+        android:layout_marginEnd="80dp"
+        android:textAllCaps="false"
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/ic_camera1" />
+
+</RelativeLayout>

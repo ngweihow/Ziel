@@ -17,12 +17,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.quartz.zielclient.R;
-import com.quartz.zielclient.activities.common.MapsActivity;
+import com.quartz.zielclient.activities.channel.MapsActivity;
 import com.quartz.zielclient.channel.ChannelController;
 import com.quartz.zielclient.channel.ChannelData;
 import com.quartz.zielclient.channel.ChannelRequestController;
-import com.quartz.zielclient.exceptions.AuthorisationException;
 import com.quartz.zielclient.models.CarerSelectionItem;
+import com.quartz.zielclient.user.AuthorisationException;
 import com.quartz.zielclient.user.User;
 import com.quartz.zielclient.user.UserController;
 import com.quartz.zielclient.user.UserFactory;
@@ -73,7 +73,9 @@ public class CarerSelectListAdapter
     return listItems.size();
   }
 
-  /** TextViewHolder class made for this CarerSelectListAdapter */
+  /**
+   * TextViewHolder class made for this CarerSelectListAdapter
+   */
   class TextViewHolder extends RecyclerView.ViewHolder
       implements View.OnClickListener, ValueEventListener {
 
@@ -83,6 +85,7 @@ public class CarerSelectListAdapter
 
     private String carerId;
     private User assisted;
+
     private Intent intentToMaps;
     private ChannelData channelData;
 
@@ -98,20 +101,6 @@ public class CarerSelectListAdapter
     // when user is selected make a channel request to them
     @Override
     public void onClick(View v) {
-      channelData =
-          ChannelController.createChannel(
-              () -> {}, textViewId.getText().toString(), FirebaseAuth.getInstance().getUid());
-
-      // start intent to open maps
-      intentToMaps = new Intent(activity, MapsActivity.class);
-      intentToMaps.putExtra(activity.getString(R.string.channel_key), channelData.getChannelKey());
-      Bundle bundle = activity.getIntent().getExtras();
-
-      // inject the destination which was established on the homepage
-      if (bundle != null) {
-        LatLng destination = bundle.getParcelable("destination");
-        intentToMaps.putExtra("destination", destination);
-      } // get the user
       try {
         UserController.fetchThisUser(this);
       } catch (AuthorisationException e) {
@@ -121,13 +110,31 @@ public class CarerSelectListAdapter
 
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+      String carerNameStr = carerName.getText().toString();
       assisted = UserFactory.getUser(dataSnapshot);
+      channelData = ChannelController.createChannel(
+          () -> {
+          }, textViewId.getText().toString(), FirebaseAuth.getInstance().getUid(), assisted.fullName(), carerNameStr);
+
+      // start intent to open maps
+      intentToMaps = new Intent(activity, MapsActivity.class);
+      intentToMaps.putExtra("isAsssisted", true);
+      intentToMaps.putExtra(activity.getString(R.string.channel_key), channelData.getChannelKey());
+      Bundle bundle = activity.getIntent().getExtras();
+
+      // inject the destination which was established on the homepage
+      if (bundle != null) {
+        LatLng destination = bundle.getParcelable("destination");
+        intentToMaps.putExtra("destination", destination);
+      }
+
       carerId = textViewId.getText().toString();
       ChannelRequestController.createRequest(assisted, carerId, channelData.getChannelKey(), "");
       activity.startActivity(intentToMaps);
     }
 
     @Override
-    public void onCancelled(@NonNull DatabaseError databaseError) {}
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+    }
   }
 }

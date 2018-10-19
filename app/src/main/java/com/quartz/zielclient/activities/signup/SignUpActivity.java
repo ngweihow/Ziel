@@ -11,8 +11,22 @@ import com.quartz.zielclient.R;
 
 import static android.Manifest.permission.READ_PHONE_STATE;
 
+/**
+ * This class is responsible for handling the sign up of the app, which handles permissions and
+ * proceeds to the Verify Phone number activity afterwards.
+ */
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
+  /**
+   * Called when the activity is starting.
+   * <p>
+   * Documentation: https://developer.android.com/reference/android/app/Activity.html#
+   * onCreate(android.os.Bundle)
+   *
+   * @param savedInstanceState If the activity is being re-initialized after previously being shut
+   *                           down then this Bundle contains the data it most recently
+   *                           supplied in onSaveInstanceState(Bundle)
+   */
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -24,6 +38,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     requestPermissions(new String[]{READ_PHONE_STATE}, 1);
   }
 
+  /**
+   * Called when a view has been clicked.
+   * <p>
+   * Documentation: https://developer.android.com/reference/android/view/V
+   * iew.OnClickListener.html#onClick(android.view.View)
+   *
+   * @param view The view that was clicked.
+   */
   @Override
   public void onClick(View view) {
     int clickedId = view.getId();

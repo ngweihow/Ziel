@@ -14,14 +14,27 @@ import com.quartz.zielclient.R;
 import com.quartz.zielclient.activities.assisted.AssistedHomePageActivity;
 import com.quartz.zielclient.activities.carer.CarerHomepageActivity;
 import com.quartz.zielclient.activities.common.SplashScreenActivity;
-import com.quartz.zielclient.exceptions.AuthorisationException;
+import com.quartz.zielclient.user.AuthorisationException;
 import com.quartz.zielclient.user.User;
 import com.quartz.zielclient.user.UserController;
 
 import static android.view.View.OnClickListener;
 
+/**
+ * This activity is responsible for creating an account for a user.
+ */
 public class AccountCreationActivity extends AppCompatActivity implements OnClickListener {
 
+  /**
+   * Called when the activity is starting.
+   * <p>
+   * Documentation: https://developer.android.com/reference/android/app/Activity.html#
+   * onCreate(android.os.Bundle)
+   *
+   * @param savedInstanceState If the activity is being re-initialized after previously being shut
+   *                           down then this Bundle contains the data it most recently
+   *                           supplied in onSaveInstanceState(Bundle)
+   */
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -31,6 +44,14 @@ public class AccountCreationActivity extends AppCompatActivity implements OnClic
     accountCreationButton.setOnClickListener(this);
   }
 
+  /**
+   * Called when a view has been clicked.
+   * <p>
+   * Documentation: https://developer.android.com/reference/android/view/V
+   * iew.OnClickListener.html#onClick(android.view.View)
+   *
+   * @param v The view that was clicked.
+   */
   @Override
   public void onClick(View v) {
     // We only want to listen on the account creation button
@@ -55,6 +76,10 @@ public class AccountCreationActivity extends AppCompatActivity implements OnClic
     }
   }
 
+  /**
+   * Starts new activity after account is created for a user.
+   * @param user The user the account belongs to.
+   */
   public void completeAccountCreation(User user) {
     Intent intent = new Intent();
     intent.putExtra("user", user.toBundle());
@@ -70,6 +95,9 @@ public class AccountCreationActivity extends AppCompatActivity implements OnClic
     finish();
   }
 
+  /**
+   * Handle any login failures when signing into the app.
+   */
   private void handleLoginFailure() {
     Toast toast = Toast.makeText(this, R.string.failed_creation, Toast.LENGTH_SHORT);
     toast.show();

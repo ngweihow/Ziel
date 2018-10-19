@@ -8,12 +8,12 @@
     <string name="firstNameEntry">First name</string>
     <string name="lastNameEntry">Last name</string>
     <string name="chooseRole">Please select the profile that fits you.</string>
-    <string name="assisted_desc">I am looking for assistance.</string>
-    <string name="carer_desc">I am looking to help.</string>
+    <string name="assisted_desc">I am looking for assistance</string>
+    <string name="carer_desc">I am looking to be a carer</string>
     <string name="userId">userId</string>
     <string name="no_splash_screen_loaded">No Splash Screen Loaded</string>
-    <string name="title_activity_home_page">HomePageActivity</string>
-    <string name="title_activity_carer_homepage">CarerHomepageActivity</string>
+    <string name="title_activity_home_page">Home</string>
+    <string name="title_activity_carer_homepage">Home</string>
     <string name="title_activity_session">SessionActivity</string>
     <string name="title_activity_carer_session">CarerSession</string>
     <string name="title_activity_assisted_session">AssistedSession</string>
@@ -38,7 +38,7 @@
     <string name="userNotFound">User not found try again</string>
     <string name="turn_speaker_on">Speaker ON</string>
     <string name="callee">client identity or phone number</string>
-    <string name="callHint">Dial a client name or phone number. Leaving the field empty results in an automated response.</string>
+    <string name="callHint">This will establish a call with the other user.</string>
     <string name="codec_title">Set your preferred audio and video codec. Not all codecs are supported with Group rooms. The media server will fallback to OPUS or VP8 if a preferred codec is not supported.</string>
     <string name="pref_title_audio_codec">Audio Codec</string>
     <string name="pref_title_video_codec">Video Codec</string>
@@ -52,4 +52,17 @@
     <string name="settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
     <string name="vp8_simulcast">VP8 Simulcast</string>
+    <string name="text_chat">Text Chat</string>
+    <string name="title_activity_take_photos">Landmark Recognition</string>
+    <string name="video_call">Video Call</string>
+    <string name="please_wait_for_carer_to_join_channel">Please wait for carer to join channel...</string>
+    <string name="nmessage">Message</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="capture_image">Capture Image</string>
+    <string name="picture">Picture</string>
+    <string name="title_activity_gallery">GalleryActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ziel_logo">ziel logo</string>
 </resources>

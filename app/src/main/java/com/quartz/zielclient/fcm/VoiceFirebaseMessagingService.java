@@ -17,8 +17,8 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.quartz.zielclient.R;
-import com.quartz.zielclient.activities.common.SoundPoolManager;
-import com.quartz.zielclient.activities.common.VoiceActivity;
+import com.quartz.zielclient.voip.SoundPoolManager;
+import com.quartz.zielclient.activities.channel.VoiceActivity;
 import com.twilio.voice.CallInvite;
 import com.twilio.voice.MessageException;
 import com.twilio.voice.MessageListener;
@@ -104,14 +104,14 @@ public class VoiceFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.createNotificationChannel(callInviteChannel);
 
         notification =
-            buildNotification(callInvite.getFrom() + " is calling.", pendingIntent, extras);
+            buildNotification("Call incoming", pendingIntent, extras);
         notificationManager.notify(notificationId, notification);
       } else {
         NotificationCompat.Builder notificationBuilder =
             new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_call_end_white_24dp)
                 .setContentTitle(getString(R.string.app_name))
-                .setContentText(callInvite.getFrom() + " is calling.")
+                .setContentText("Call incoming")
                 .setAutoCancel(true)
                 .setExtras(extras)
                 .setContentIntent(pendingIntent)

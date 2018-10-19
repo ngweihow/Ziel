@@ -3,9 +3,9 @@ package com.quartz.zielclient.activities.carer;
 import android.content.Intent;
 
 import com.quartz.zielclient.R;
-import com.quartz.zielclient.activities.common.TextChatActivity;
-import com.quartz.zielclient.activities.common.VideoActivity;
-import com.quartz.zielclient.activities.common.VoiceActivity;
+import com.quartz.zielclient.activities.channel.TextChatActivity;
+import com.quartz.zielclient.activities.channel.VideoActivity;
+import com.quartz.zielclient.activities.channel.VoiceActivity;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

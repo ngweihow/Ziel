@@ -10,7 +10,7 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="199dp"
+        android:layout_width="196dp"
         android:layout_height="196dp"
         android:layout_marginBottom="23dp"
         android:layout_marginTop="57dp"
@@ -27,7 +27,7 @@
         android:layout_marginBottom="53dp"
         android:ems="10"
         android:hint="Enter Carer Phone Number"
-        android:inputType="textPersonName"
+        android:inputType="phone"
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/sendRequestButton"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,11 +50,12 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="361dp"
+        android:layout_width="318dp"
         android:layout_height="32dp"
         android:layout_marginEnd="30dp"
         android:layout_marginStart="30dp"
-        android:text="*Please ensure country code is Included"
+        android:text="*Please include country code"
+        android:textAlignment="center"
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/carerNumberInput"
         app:layout_constraintEnd_toEndOf="parent"

@@ -21,25 +21,25 @@
 
     <com.twilio.video.VideoView
         android:id="@+id/primary_video_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"/>
 
     <LinearLayout
         android:id="@+id/status"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="bottom">
+        android:layout_gravity="top"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/video_status_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@color/colorAccent"
-            android:textSize="20sp"
-            android:text="@string/room_status"/>
+            android:text="@string/room_status"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
 
     </LinearLayout>
 

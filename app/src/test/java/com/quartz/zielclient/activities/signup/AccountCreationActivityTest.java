@@ -18,7 +18,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk=26)
+@Config(sdk = 26)
 public class AccountCreationActivityTest {
 
   @Test
@@ -28,7 +28,7 @@ public class AccountCreationActivityTest {
   }
 
   @Test
-  public void testAssisted(){
+  public void testAssisted() {
     User testAssisted = new User();
     testAssisted.setAssisted(true);
     AccountCreationActivity activity = Robolectric.setupActivity(AccountCreationActivity.class);
@@ -41,7 +41,7 @@ public class AccountCreationActivityTest {
 
 
   @Test
-  public void testCarer(){
+  public void testCarer() {
     User testAssisted = new User();
     testAssisted.setAssisted(false);
     AccountCreationActivity activity = Robolectric.setupActivity(AccountCreationActivity.class);

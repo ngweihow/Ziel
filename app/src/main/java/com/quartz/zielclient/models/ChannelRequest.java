@@ -32,8 +32,8 @@ public class ChannelRequest implements Model, Comparable<ChannelRequest> {
     // Intentionally empty
   }
 
-  public ChannelRequest(String assistedName, String channelId, String description) {
-    this.name = assistedName;
+  public ChannelRequest(String name, String channelId, String description) {
+    this.name = name;
     this.channelId = channelId;
     this.description = description;
     // Convert Unix time from ms to s
@@ -81,6 +81,7 @@ public class ChannelRequest implements Model, Comparable<ChannelRequest> {
 
   /**
    * Formats the timestamp to a string representation.
+   *
    * @return A formatted timestamp.
    */
   public String formattedTimestamp() {
@@ -90,7 +91,7 @@ public class ChannelRequest implements Model, Comparable<ChannelRequest> {
 
   @Override
   public int compareTo(@NonNull ChannelRequest o) {
-    return Long.compare(o.timestamp,timestamp);
+    return Long.compare(o.timestamp, timestamp);
   }
 
   @Override

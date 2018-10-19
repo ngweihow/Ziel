@@ -4,6 +4,8 @@ Team Quartz client-side Android project.
 
 Navigation software designed to facilitate a channel which allows assistance to be delivered to an individual.  
 
+![alt text](https://i.imgur.com/EajOPNo.png "Ziel Logo") 
+
 ## Getting Started
 
 * Run `git clone https://github.com/COMP30022-18/ZielClient.git` in your terminal.
@@ -12,6 +14,44 @@ Navigation software designed to facilitate a channel which allows assistance to 
 * Follow the instructions in [this link](https://developer.android.com/studio/run/) to set up your emulator.
 
 Please note that we use Android SDK Version 28, and targeting Java 8. See [this link](https://developer.android.com/studio/write/java8-support) to see how to configure Android Studio to use Java 8.
+## Using Application 
+To use this application to test its features you should do the following
+
+Ensure that you pull the latest version of this repository.
+1. Build and run the application on two devices. 
+
+2. Using two devices one device should sign up as a carer and the other as an assisted
+
+3. The assisted should then request the carer by choosing a location and adding the carer using the phone number.
+
+* If using an emulator you will be required to set location in emulator settings. (Melbourne University has long: 144.9612 and lat: -37.7964)
+
+4. The carer should get a notification and open the channel with the user.
+
+Since account creation is based on phone numbers. Feel free to use these numbers when working with emulator.
+* Number: +61111222333  Verification Number: 123456
+* Number: +61444555666  Verification Number: 123456
+
+
+
+
+
+## Current Features
+Numbered as per requirements documents.
+* Feature 1: A user is able to register an account using their phone number
+* Feature 2: Map page- Display Route to destination to the Assisted	
+* Feature 3: Link permanent Carers to Assisted
+* Feature 4: Request Assistance from Carer
+* Feature 5: Location and Route shared from Assisted to Carer
+* Feature 6: Audio and Video Call 
+* Feature 7: Text Chat including data Sharing	
+* Feature 8: Carer’s home page- Carer can view their assisted list
+* Feature 9: User status
+* Feature 10: User settings
+* Feature 12: Application feedback
+* Feature 13: Landmark Recognition
+
+
 
 ## Setting up Google API keys
 
@@ -52,7 +92,9 @@ The complete list of coding practices is available [here](https://docs.google.co
 
 ## Built With
 
-* [Gradle](https://gradle.org/) - Dependency Management
+
+[Gradle](https://gradle.org/) - Dependency Management
+
 
 
 

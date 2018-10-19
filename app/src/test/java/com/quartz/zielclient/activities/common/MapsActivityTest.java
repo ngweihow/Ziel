@@ -3,6 +3,10 @@ package com.quartz.zielclient.activities.common;
 import android.content.Intent;
 
 import com.quartz.zielclient.R;
+import com.quartz.zielclient.activities.channel.MapsActivity;
+import com.quartz.zielclient.activities.channel.TextChatActivity;
+import com.quartz.zielclient.activities.channel.VideoActivity;
+import com.quartz.zielclient.activities.channel.VoiceActivity;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

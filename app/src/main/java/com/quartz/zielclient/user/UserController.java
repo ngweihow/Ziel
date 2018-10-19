@@ -8,7 +8,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.quartz.zielclient.exceptions.AuthorisationException;
 
 import java.util.Optional;
 
@@ -90,6 +89,15 @@ public final class UserController {
   public static void fetchThisUser(ValueEventListener listener) throws AuthorisationException {
     FirebaseUser firebaseUser = retrieveFirebaseUser();
     fetchUser(firebaseUser.getUid(), listener);
+  }
+
+  public static void updateSelf(final User user, ValueEventListener listener) {
+    Optional<String> userId = retrieveUid();
+    userId.ifPresent(id -> {
+      DatabaseReference ref = firebaseDatabase.getReference(USER_DATABASE_PATH).child(id);
+      ref.addListenerForSingleValueEvent(listener);
+      ref.setValue(user);
+    });
   }
 
   private static String userIdPath(String userId) {

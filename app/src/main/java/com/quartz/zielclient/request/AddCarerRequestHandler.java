@@ -42,10 +42,12 @@ public class AddCarerRequestHandler implements ValueEventListener {
           .forEach(
               (user) -> {
                 String carerId = user.getKey();
-                relationshipReference
-                    .child(firebaseAuth.getUid())
-                    .child(carerId)
-                    .setValue(user.getValue());
+                if (firebaseAuth.getUid() != null && carerId !=null) {
+                  relationshipReference
+                      .child(firebaseAuth.getUid())
+                      .child(carerId)
+                      .setValue(user.getValue());
+                }
               });
       carerRequestListener.userFound();
     } else {

@@ -14,8 +14,9 @@ import org.robolectric.annotation.Config;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.robolectric.Shadows.shadowOf;
+
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk=26)
+@Config(sdk = 26)
 public class SignUpActivityTest {
 
   @Test

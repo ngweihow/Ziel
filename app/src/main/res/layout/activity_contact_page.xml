@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.common.MapsActivity"
+    tools:context=".activities.channel.MapsActivity"
     android:orientation="vertical"
-    android:weightSum="1">>
+    android:weightSum="1">
 
     <fragment
         android:id="@+id/place_autocomplete"

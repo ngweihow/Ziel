@@ -6,12 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".activities.common.SplashScreenActivity">
 
-
     <ImageView
+        android:id="@+id/imageView5"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
         android:contentDescription="@string/no_splash_screen_loaded"
         android:src="@drawable/splash_orange"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="300dp"
+        android:layout_height="128dp"
+        android:contentDescription="@string/ziel_logo"
+        android:elevation="2dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@drawable/ic_ziel_logo" />
 
 </android.support.constraint.ConstraintLayout>
